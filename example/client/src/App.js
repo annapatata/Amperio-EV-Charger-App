@@ -13,7 +13,7 @@ function App(){
 	const fetchChargers = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch('http://localhost:3001/api/chargers');
+			const response = await fetch('/api/chargers');
 			const data = await response.json();
 			setChargers(data.chargers || []);
 		} catch (error) {

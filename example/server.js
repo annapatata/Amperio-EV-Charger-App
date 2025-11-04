@@ -3,8 +3,6 @@ const mysql = require('mysql2');
 require('dotenv').config();
 const app = express();
 app.use(express.json());
-const cors = require('cors');
-app.use(cors());
 const port = 3001;
 
 // MySQL connection
