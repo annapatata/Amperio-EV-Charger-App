@@ -11,7 +11,7 @@ class UserModel {
 
 	// create new user
 	static async create(name, email, password) {
-		const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)'; 
+		const sql = 'INSERT INTO users (username, email, safe_password) VALUES (?, ?, ?)'; 
 		const [result] = await db.query(sql, [name, email, password]); // pwd is hashed from controller
 		return result;
 	}

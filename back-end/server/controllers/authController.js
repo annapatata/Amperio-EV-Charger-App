@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // 1. Sign up
-const register = async (req, res) => {
+const signup = async (req, res) => {
 	const { name, email, password } = req.body;
 
 	try {
@@ -18,7 +18,7 @@ const register = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, salt);
 
 		// C. save to DB
-		await User.create(name, email, hashedPassword);
+		result = await User.create(name, email, hashedPassword);
 
 		// D. create token for login
 		const newUserId = result.insertId;
@@ -37,6 +37,7 @@ const register = async (req, res) => {
 		});
 
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ message: 'Server error' });
 	}
 };
@@ -54,7 +55,7 @@ const login = async (req, res) => {
 		}
 
 		// B. compare the password sent vs the scrambled password in DB
-		const isMatch = await bcrypt.compare(password, user.password);
+		const isMatch = await bcrypt.compare(password, user.safe_password);
 		if (!isMatch) {
 			return res.status(400).json({ message: 'Invalid credentials' });
 		}
@@ -65,6 +66,7 @@ const login = async (req, res) => {
 
 		res.json({ token, user: { id: user.user_id, name: user.username, email: user.email } });
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ message: 'Server error' });
 	}
 };
