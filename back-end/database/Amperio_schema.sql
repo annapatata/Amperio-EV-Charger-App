@@ -31,8 +31,8 @@ CREATE TABLE Station (
 	longitude FLOAT NOT NULL,
 	latitude FLOAT NOT NULL,
 	postal_code INT,
-	facilities MEDIUMTEXT
-	google_maps_link VARCHAR(255);
+	facilities MEDIUMTEXT,
+	google_maps_link VARCHAR(255)
 );
 
 
@@ -81,7 +81,7 @@ CREATE TABLE Pricing (
 -- -----------------------------------------------------
 -- Table Account
 -- -----------------------------------------------------
-CREATE TABLE User(
+CREATE TABLE Users(
 	user_id int primary key auto_increment,
 	username varchar(255) not null,
 	safe_password varchar(255) not null,
@@ -104,11 +104,11 @@ CREATE TABLE User(
 -- -------------------------------------
 CREATE TABLE Reservation(
 	reservation_id int primary key auto_increment,
-	account_id int,
+	user_id int,
 	charger_id int,
 	reservation_time timestamp not null,
 	time_remaining time not null,
-	foreign key (account_id) references Customer_account(account_id)
+	foreign key (user_id) references Users(user_id)
 	on update cascade on delete cascade,
 	foreign key (charger_id) references Charger(charger_id)
 	on update cascade on delete cascade
@@ -126,12 +126,10 @@ CREATE TABLE Session(
 	cost float not null,
 	energy_delivered decimal(5,2) not null,
 	charger_id int not null,
-	account_id int not null,
+	user_id int not null,
 	session_progress int check(0 <= session_progress & session_progress <= 100),
 	foreign key (charger_id) references Charger(charger_id)
 	on update cascade on delete restrict,
-	foreign key (account_id) references Customer_account(account_id)
+	foreign key (user_id) references Users(user_id)
 	on update cascade on delete restrict
 );
-
-

@@ -2,10 +2,10 @@ const db = require('../config/db'); // Import the database connection
 
 class UserModel {
 
-	// return data from user with that email
-	static async findByEmail(email) {
-		const sql = 'SELECT * FROM users WHERE email = ?';
-		const [rows] = await db.query(sql, [email]);
+	// return data from user with that email or username
+	static async findByIdentifier(email, name) {
+		const sql = 'SELECT * FROM users WHERE email = ? OR username = ? LIMIT 1';
+		const [rows] = await db.query(sql, [email, name]);
 		return rows[0]; 
 	}
 

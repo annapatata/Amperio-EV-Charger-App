@@ -8,7 +8,7 @@ const signup = async (req, res) => {
 
 	try {
 		// A. check if user exists
-		const existingUser = await User.findByEmail(email);
+		const existingUser = await User.findByIdentifier(email, name);
 		if (existingUser) {
 			return res.status(400).json({ message: 'User already exists' });
 		}
@@ -45,11 +45,11 @@ const signup = async (req, res) => {
 
 // 2. Login
 const login = async (req, res) => {
-	const { email, password } = req.body;
+	const { identifier, password } = req.body;
 
 	try {
-		// A. find user by email
-		const user = await User.findByEmail(email);
+		// A. find user by email or username
+		const user = await User.findByIdentifier(identifier, identifier);
 		if (!user) {
 			return res.status(400).json({ message: 'Invalid credentials' });
 		}
