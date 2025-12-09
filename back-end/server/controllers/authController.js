@@ -25,7 +25,7 @@ const signup = async (req, res) => {
 
 		const token = jwt.sign(
 			{ id: newUserId },
-			process.env.JWT_SECRET || 'secret', // Use your .env variable here
+			process.env.JWT_SECRET, // Use your .env variable here
 			{ expiresIn: '1h' }
 		);
 
@@ -33,7 +33,7 @@ const signup = async (req, res) => {
 		res.status(201).json({
 			message: 'User registered and logged in',
 			token,
-			user: { id: newUserId, name, email }
+			user: { id: newUserId, name: name, email: email }
 		});
 
 	} catch (err) {

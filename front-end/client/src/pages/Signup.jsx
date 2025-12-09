@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import axios from "axios";
+import api from "../axiosConfig";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       // 1. Send data to backend
-      const res = await axios.post("http://localhost:3001/api/auth/signup", input);
+      const res = await api.post("http://localhost:3001/api/auth/signup", input);
       
       // 2. Get the token and user from the response
       const { token, user } = res.data;
