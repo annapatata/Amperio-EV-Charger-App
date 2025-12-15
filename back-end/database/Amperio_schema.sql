@@ -48,6 +48,7 @@ CREATE TABLE Charger (
 	installed_at timestamp not null,
 	last_checked timestamp not null,
 	charger_status enum('available', 'charging', 'reserved', 'malfunction', 'offline') not null,
+	current_price int decimal(5,3),
 	FOREIGN KEY (power) REFERENCES POWER(power)
 	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (connector_id) REFERENCES Connector(connector_id)
@@ -58,10 +59,10 @@ CREATE TABLE Charger (
 
 
 -- -----------------------------------------------------
--- Table Pricing
+-- Table PricingHistory (for the admins)
 -- -----------------------------------------------------
 
-CREATE TABLE Pricing (
+CREATE TABLE PricingHistory (
 	pricing_id INT AUTO_INCREMENT PRIMARY KEY,
 	charger_id INT,
 	power INT,
@@ -106,8 +107,8 @@ CREATE TABLE Reservation(
 	reservation_id int primary key auto_increment,
 	user_id int,
 	charger_id int,
-	reservation_time timestamp not null,
-	time_remaining time not null,
+	reservation_start_time timestamp not null,
+	reservation_end_time timestamp not null,
 	foreign key (user_id) references Users(user_id)
 	on update cascade on delete cascade,
 	foreign key (charger_id) references Charger(charger_id)
@@ -122,8 +123,11 @@ CREATE TABLE Session(
 	session_id int primary key auto_increment,
 	start_time timestamp not null,
 	end_time timestamp not null,
-	money_preblocked float not null, 
-	cost float not null,
+	start_soc int not null,
+	end_soc int not null,
+	price_per_kwh decimal(5,3),
+	money_preblocked decimal(5,2) not null, 
+	cost decimal(5,3) not null,
 	energy_delivered decimal(5,2) not null,
 	charger_id int not null,
 	user_id int not null,
@@ -132,4 +136,17 @@ CREATE TABLE Session(
 	on update cascade on delete restrict,
 	foreign key (user_id) references Users(user_id)
 	on update cascade on delete restrict
+);
+
+-- ---------------------------------------------------
+-- Table ChargerStatusHistory
+-- ---------------------------------------------------
+CREATE TABLE ChargerStatusHistory (
+	history_id INT AUTO_INCREMENT PRIMARY KEY,
+	charger_id INT NOT NULL,
+	time_ref TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	old_state VARCHAR(20),
+	new_state VARCHAR(20),
+	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id) 
+	ON DELETE CASCADE ON UPDATE CASCADE
 );
