@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
     // create error log
     const errorLog = {
         call: req.originalUrl,                     // The full URL called
-        timeref: formatTimestamp( new Date())      // Timestamp
+        timeref: formatTimestamp( new Date()),      // Timestamp
         originator: req.ip,                        // IP address of the caller
         return_code: statusCode,                   // HTTP status code (400, 404, 500)
         error: err.message || 'Internal Server Error', // Description
