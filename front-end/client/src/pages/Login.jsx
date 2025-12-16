@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("http://localhost:3001/api/auth/login", input);
+      const res = await api.post("/auth/login", input);
       const { token, user } = res.data;
       
       loginAction(user, token);

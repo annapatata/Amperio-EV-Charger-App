@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import api from "./axiosConfig"
+import api from "../axiosConfig"
+
 
 // 1. Create the Context (The empty box)
 export const AuthContext = createContext();

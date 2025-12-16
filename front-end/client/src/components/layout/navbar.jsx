@@ -1,35 +1,31 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
-import "./Navbar.css";
+import "./navbar.css";
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
+const Navbar = () => {
+  const { user } = useContext(AuthContext);
 
   return (
-    <header className="navbar">
-      {/* Logo */}
-      <div className="nav-left">
-        <span className="logo">Amperio</span>
+    <nav className="navbar">
+      <div className="logo">
+        Amperio
       </div>
 
-      {/* Desktop links */}
-      <nav className="nav-right desktop">
-        <Link to="/profile">Profile</Link>
-        <Link to="/about">About</Link>
-      </nav>
-
-      {/* Hamburger (mobile) */}
-      <button className="hamburger" onClick={() => setOpen(!open)}>
-        ☰
-      </button>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="mobile-menu">
-          <Link to="/profile" onClick={() => setOpen(false)}>Profile</Link>
-          <Link to="/about" onClick={() => setOpen(false)}>About</Link>
-        </div>
-      )}
-    </header>
+      <div className="nav-right">
+        {!user ? (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/profile">Profile</Link>
+          </>
+        )}
+      </div>
+    </nav>
   );
-}
+};
+
+export default Navbar;

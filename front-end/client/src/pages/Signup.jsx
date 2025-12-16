@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   // Inputs state
-  const [input, setInput] = useState({ name: "", email: "", password: "" });
+  const [input, setInput] = useState({ username: "", email: "", password: "" });
   
   // Bring in the Global tools
   const { loginAction } = useContext(AuthContext);
@@ -15,7 +15,8 @@ const Signup = () => {
     e.preventDefault();
     try {
       // 1. Send data to backend
-      const res = await api.post("http://localhost:3001/api/auth/signup", input);
+      const res = await api.post("/auth/signup", input);
+
       
       // 2. Get the token and user from the response
       const { token, user } = res.data;
@@ -43,7 +44,7 @@ const Signup = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
-          <input type="text" name="name" onChange={handleChange} required />
+          <input type="text" name="username" onChange={handleChange} required />
         </div>
         <div>
           <label>Email:</label>

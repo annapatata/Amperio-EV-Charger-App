@@ -4,7 +4,7 @@
   left: 0;
   min-height: 56px;
   width: 100%;
-  background: #2a5ccf;
+  background: #5f7097;
   color: white;
   display: flex;
   align-items: center;
@@ -30,47 +30,4 @@
 
 .nav-right a:hover {
   color: #38bdf8;
-}
-
-/* Hamburger */
-.hamburger {
-  font-size: 24px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: none;
-}
-
-/* Mobile menu */
-.mobile-menu {
-  position: absolute;
-  top: 56px;
-  right: 0;
-  background: #020617;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-}
-
-.mobile-menu a {
-  padding: 12px 20px;
-  color: white;
-  text-decoration: none;
-}
-
-.mobile-menu a:hover {
-  background: #1e293b;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .desktop {
-    display: none;
-  }
-
-  .hamburger {
-    display: block;
-  }
 }

@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Map from "./pages/Map";
+import PublicRoute from "./components/PublicRoutes";
 
 function App() {
 	return (

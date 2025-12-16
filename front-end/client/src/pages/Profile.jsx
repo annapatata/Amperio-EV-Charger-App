@@ -1,11 +1,19 @@
 import { useEffect, useState, useContext } from "react";
 import api from "../axiosConfig"; 
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const { logoutAction } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logoutAction();
+    navigate("/map");   
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,8 +44,10 @@ const Profile = () => {
         <p><strong>Email:</strong> {profile.email}</p>
         <p><strong>Default Power:</strong> {profile.default_charger_power}</p>
       </div>
+      <button onClick={() => navigate("/map")}>Go to Map</button>
 
-      <button onClick={logoutAction}>Logout</button>
+      <button onClick={handleLogout}>Logout</button>
+
     </div>
   );
 };
