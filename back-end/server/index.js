@@ -11,6 +11,7 @@ const errorHandler = require('./middleware/errorHandler');
 // import routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
@@ -22,7 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 // mount routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
+//app.use('/api/admin', adminRoutes);
+app.use('/api/points', chargerRoutes);
+app.use('/api/point', chargerRoutes);
 
 // 404 handler
 app.use((req, res, next) => {
