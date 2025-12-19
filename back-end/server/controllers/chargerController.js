@@ -15,7 +15,7 @@ const getPoints = async (req, res, next) => {
             if (!VALID_STATUSES.includes(status)) {
                 res.status(400);
                 const error = new Error(`Invalid status parameter. Supported values: ${VALID_STATUSES.join(', ')}`);
-		return next(error);
+		        return next(error);
             }
 
             // If valid, fetch filtered points using the static method
@@ -89,7 +89,7 @@ const healthcheck = async (req, res, next) => {
 };
 
 
-	    const reservePoint = async (req, res, next) => {
+const reservePoint = async (req, res, next) => {
     try {
         
         //get point
@@ -98,7 +98,7 @@ const healthcheck = async (req, res, next) => {
 
         //check if it exists
         if (!point) {
-            res.status(404); //shouldn't this be a 400 error since its invalid parameters??
+            res.status(404);
             return next(new Error(`Point with ID ${id} not found for reservation`));
         }
         
@@ -106,12 +106,9 @@ const healthcheck = async (req, res, next) => {
         let minutes = req.params.minutes !== undefined ? parseInt(req.params.minutes, 10) : 30;
 
         //check if valid
-        if (Number.isNaN(minutes) || minutes <= 0 || minutes > 24 * 60) {
-            res.status(400);
-            return next(new Error('Invalid minutes parameter. Must be an integer between 1 and 1440'));
-        }//here there is a check for the validity of the minutes data but we dont really care about it
-        //basically the exercise says if its above the max we set it to the max and if its below the min
-        //we set it to the min but should we still do that if the values are extremely out of range?
+        if (Number.isNaN(minutes) || minutes <= 0 || minutes > 60) {
+            minutes = Math.min(Math.max(minutes, 30), 60);
+        }
 
         //check if point is available
         if( await Charger.getPointStatus(id) == 'available') {
@@ -120,14 +117,14 @@ const healthcheck = async (req, res, next) => {
             point.reservationendtime = formatTimestamp(new Date(Date.now() + minutes*60000));
 
             //update database
-            await Charger.setPointStatus(id, 'reserved'); //do we need to check if these await functions time out somehow?
+            await Charger.setPointStatus(id, 'reserved');
             await Charger.setReservationEndTime(id, point.reservationendtime);
             
             console.log({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
             return res.status(200).json({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
         }
         else {
-            res.status(400);
+            res.status(404);
             console.log({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
             return next(new Error(`Point with ID ${id} is not available for reservation`));
         }
@@ -135,6 +132,44 @@ const healthcheck = async (req, res, next) => {
         next(error);
     }
 };
+
+const updatePoint = async (req, res, next) => {
+    try {
+
+        //get and check id
+        const { id } = req.params;
+        const point = await Charger.getById(id);
+
+        if (!point) {
+            res.status(404);
+            return next(new Error(`Point with ID ${id} not found for update`));
+        }
+
+        //get and check body parameters
+        const { status, kwhprice } = req.body;
+
+        if (!VALID_STATUSES.includes(status)) {
+            res.status(400);
+            const error = new Error(`Invalid status parameter. Supported values: ${VALID_STATUSES.join(', ')}`);
+		    return next(error);
+        }
+
+        //update point object
+        point.status = status;
+        point.kwhprice = kwhprice;
+
+        //update database
+        await Charger.setPointStatus(id, status);
+        await Charger.setKwhPrice(id, kwhprice);
+
+        console.log({ pointid: id, status: point.status, kwhprice: point.kwhprice });
+        return res.status(200).json({ pointid: id, status: point.status, kwhprice: point.kwhprice });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 const getTimePointStatus= async (req, res,next) => {
     try {
@@ -166,5 +201,5 @@ const getTimePointStatus= async (req, res,next) => {
     }
 };
 
-module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus};
+module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus, updatePoint };
 

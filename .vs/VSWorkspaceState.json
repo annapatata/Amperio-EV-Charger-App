@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\back-end",
+    "\\back-end\\server",
+    "\\back-end\\server\\config",
+    "\\back-end\\server\\controllers",
+    "\\back-end\\server\\middleware",
+    "\\back-end\\server\\models",
+    "\\back-end\\server\\routes",
+    "\\front-end",
+    "\\front-end\\client"
+  ],
+  "SelectedNode": "\\back-end\\database\\Views.sql",
+  "PreviewInSolutionExplorer": false
+}

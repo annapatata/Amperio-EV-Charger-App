@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\index.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back-end\\server\\index.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\routes\\chargerRoutes.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back-end\\server\\routes\\chargerRoutes.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\models\\chargerModel.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back-end\\server\\models\\chargerModel.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\controllers\\chargerController.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back-end\\server\\controllers\\chargerController.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\database\\Views.sql||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back-end\\database\\Views.sql||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Views.sql",
+              "DocumentMoniker": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\database\\Views.sql",
+              "RelativeDocumentMoniker": "back-end\\database\\Views.sql",
+              "ToolTip": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\database\\Views.sql",
+              "RelativeToolTip": "back-end\\database\\Views.sql",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-12-19T11:29:17.047Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "index.js",
+              "DocumentMoniker": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\index.js",
+              "RelativeDocumentMoniker": "back-end\\server\\index.js",
+              "ToolTip": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\index.js",
+              "RelativeToolTip": "back-end\\server\\index.js",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACIAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-19T10:55:13.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "chargerController.js",
+              "DocumentMoniker": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\controllers\\chargerController.js",
+              "RelativeDocumentMoniker": "back-end\\server\\controllers\\chargerController.js",
+              "ToolTip": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\controllers\\chargerController.js",
+              "RelativeToolTip": "back-end\\server\\controllers\\chargerController.js",
+              "ViewState": "AgIAAIgAAAAAAAAAAAAAAKAAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-19T10:55:20.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "chargerModel.js",
+              "DocumentMoniker": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\models\\chargerModel.js",
+              "RelativeDocumentMoniker": "back-end\\server\\models\\chargerModel.js",
+              "ToolTip": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\models\\chargerModel.js",
+              "RelativeToolTip": "back-end\\server\\models\\chargerModel.js",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADwAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-19T10:55:18.748Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "chargerRoutes.js",
+              "DocumentMoniker": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\routes\\chargerRoutes.js",
+              "RelativeDocumentMoniker": "back-end\\server\\routes\\chargerRoutes.js",
+              "ToolTip": "C:\\Users\\Hektor\\Pictures\\school stuff\\ntua 7th\\v2\\softeng25-19\\back-end\\server\\routes\\chargerRoutes.js",
+              "RelativeToolTip": "back-end\\server\\routes\\chargerRoutes.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-19T10:55:16.895Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
