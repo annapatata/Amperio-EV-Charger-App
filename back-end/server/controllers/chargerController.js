@@ -1,5 +1,6 @@
 const Charger = require('../models/chargerModel');
 const { formatTimestamp } = require('../utils/dateUtils');
+const { parseUrlDate } = require('../utils/dateUtils');
 
 // Define the valid statuses based on your requirements
 const VALID_STATUSES = ['available', 'charging', 'reserved', 'out_of_order'];
@@ -135,7 +136,35 @@ const healthcheck = async (req, res, next) => {
     }
 };
 
+const getTimePointStatus= async (req, res,next) => {
+    try {
+        const { pointid, from, to } = req.params;
 
+        // 1. Convert URL strings (YYYYMMDD) to SQL format (YYYY-MM-DD)
+        const sqlFrom = parseUrlDate(from);
+        const sqlTo = parseUrlDate(to);
 
-module.exports = { getPoints, getPointDetails, reservePoint, healthcheck };
+        // 2. Validation: If the dates are invalid, return a 400 Bad Request
+        if (!sqlFrom || !sqlTo) {
+            const err = new Error("Invalid date format. Use YYYYMMDD.");
+            err.statusCode = 400; 
+            return next(err);
+        }
+
+        // 3. Call the Model with the sanitized strings
+        // We append ' 00:00' and ' 23:59' to ensure we cover the full range of the days
+        const results = await Charger.getTimePointStatus(
+            pointid, 
+            `${sqlFrom} 00:00`, 
+            `${sqlTo} 23:59`
+        );
+
+        res.status(200).json(results);
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus};
 

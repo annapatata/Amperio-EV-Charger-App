@@ -30,6 +30,8 @@ app.use('/api/point', chargerRoutes);
 
 app.use('/api/reserve', chargerRoutes);
 
+app.use('/api/pointstatus', chargerRoutes);
+
 // 404 handler
 app.use((req, res, next) => {
   const error = new Error('Not Found');

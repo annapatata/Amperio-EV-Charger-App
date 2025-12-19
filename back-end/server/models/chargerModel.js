@@ -57,6 +57,12 @@ class ChargerModel {
 		return result;
 	}
 
+	static async getTimePointStatus(id,startTime,endTime){
+		const sql = 'SELECT timeref,old_state,new_state FROM StatusHistory  WHERE charger_id=? AND timeref BETWEEN ? AND ? ORDER BY timeref ASC ';
+		const [result] = await db.query(sql,[id,startTime,endTime]);
+		return result;
+	}
+
 }
 
 module.exports = ChargerModel;

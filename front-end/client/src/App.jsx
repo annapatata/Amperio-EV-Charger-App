@@ -29,6 +29,7 @@ function App() {
 
 					{/* Private */}
 					<Route element={<PrivateRoute />}>
+
 						<Route path="/profile" element={<Profile />} />
 					</Route>
 

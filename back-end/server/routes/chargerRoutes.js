@@ -9,6 +9,6 @@ router.get('/:id', chargerController.getPointDetails);
 router.post('/:id', chargerController.reservePoint);
 router.post('/:id/:minutes', chargerController.reservePoint);
 
-
+router.get('/:pointid/:from/:to',chargerController.getTimePointStatus);
 
 module.exports = router;
