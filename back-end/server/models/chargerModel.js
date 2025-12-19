@@ -35,8 +35,6 @@ class ChargerModel {
 		return rows[0];
 	}
 
-
-
 	//get Specific Point Status
 	static async getPointStatus(id) {
 		const sql = 'SELECT status FROM Points WHERE pointid = ?';
@@ -54,6 +52,12 @@ class ChargerModel {
 		// Insert a reservation record for this charger. user_id is NULL because this endpoint doesn't provide user context.
 		const sql = 'INSERT INTO Reservation (user_id, charger_id, reservation_start_time, reservation_end_time) VALUES (NULL, ?, NOW(), ?)';
 		const [result] = await db.query(sql, [id, endTime]);
+		return result;
+	}
+
+	static async setKwhPrice(id, price) {
+		const sql = 'UPDATE Charger SET current_price = ? WHERE charger_id = ?';
+		const [result] = await db.query(sql, [price, id]);
 		return result;
 	}
 
