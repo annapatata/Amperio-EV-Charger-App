@@ -143,9 +143,6 @@ CREATE TABLE Session(
 	money_preblocked DECIMAL(5,2) NOT NULL CHECK money_preblocked >= 0,
         -- amount of customer money reserved at the start
 	-- assume we dont want to reserve more than 1000 euros
-
-	--cost DECIMAL(5,2) NOT NULL,
-	-- supplier cost for energy
 	user_id INT NOT NULL,
 	-- each charging session is associated with a user
 	session_progress INT DEFAULT 100 CHECK session_progress BETWEEN 0 AND 100,
