@@ -121,22 +121,42 @@ CREATE TABLE Reservation(
 -- Table Session
 -- -----------------------------------------------------
 CREATE TABLE Session(
-	session_id int primary key auto_increment,
-	start_time timestamp not null,
-	end_time timestamp not null,
-	start_soc int not null,
-	end_soc int not null,
-	price_per_kwh decimal(5,3),
-	money_preblocked decimal(5,2) not null, 
-	cost decimal(5,3) not null,
-	energy_delivered decimal(5,2) not null,
-	charger_id int not null,
-	user_id int not null,
-	session_progress int check(0 <= session_progress & session_progress <= 100),
-	foreign key (charger_id) references Charger(charger_id)
-	on update cascade on delete restrict,
-	foreign key (user_id) references Users(user_id)
-	on update cascade on delete restrict
+	session_id INT PRIMARY KEY AUTO_INCREMENT,
+	-- each session has a unique random id
+	charger_id INT NOT NULL,
+	-- each session corresponds to a charger
+	start_time TIMESTAMP NOT NULL,
+	-- start time of a session
+	end_time TIMESTAMP NOT NULL CHECK end_time > start_time,
+	-- end time of a session, must be greater than start_time
+	start_soc INT NOT NULL CHECK start_soc BETWEEN 0 AND 100,
+	-- battery percent of car at the start
+	end_soc INT NOT NULL CHECK (end_soc >= start_soc) AND (end_soc BETWEEN 0 AND 100),
+	-- battery oercent of car at the end, must be at least start_soc or greater
+	-- must also be a valid percentage, same as start_soc
+	energy_delivered DECIMAL(6,3) NOT NULL CHECK energy_delivered >= 0,
+	-- energy used in the charging process
+	-- assume battery capacity no more than 1000 kwh and precision of wh
+	price_per_kwh DECIMAL(5,3) NOT NULL CHECK price_per_kwh >= 0,
+	-- price paid by the customer per kwh
+	-- assume price no more than 100 with two decical precision
+	money_preblocked DECIMAL(5,2) NOT NULL CHECK money_preblocked >= 0,
+        -- amount of customer money reserved at the start
+	-- assume we dont want to reserve more than 1000 euros
+
+	--cost DECIMAL(5,2) NOT NULL,
+	-- supplier cost for energy
+	user_id INT NOT NULL,
+	-- each charging session is associated with a user
+	session_progress INT DEFAULT 100 CHECK session_progress BETWEEN 0 AND 100,
+	-- progress of each session
+
+	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id)
+	ON UPDATE CASCADE ON DELETE RESTRICT,
+	-- charger exists
+	FOREIGN KEY (user_id) REFERENCES Users(user_id)
+	ON UPDATE CASCADE ON DELETE RESTRICT
+	-- user exists
 );
 
 -- ---------------------------------------------------
