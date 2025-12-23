@@ -127,25 +127,25 @@ CREATE TABLE Session(
 	-- each session corresponds to a charger
 	start_time TIMESTAMP NOT NULL,
 	-- start time of a session
-	end_time TIMESTAMP NOT NULL CHECK end_time > start_time,
+	end_time TIMESTAMP NOT NULL CHECK (end_time > start_time),
 	-- end time of a session, must be greater than start_time
-	start_soc INT NOT NULL CHECK start_soc BETWEEN 0 AND 100,
+	start_soc INT NOT NULL CHECK (start_soc BETWEEN 0 AND 100),
 	-- battery percent of car at the start
-	end_soc INT NOT NULL CHECK (end_soc >= start_soc) AND (end_soc BETWEEN 0 AND 100),
+	end_soc INT NOT NULL CHECK ((end_soc >= start_soc) AND (end_soc BETWEEN 0 AND 100)),
 	-- battery oercent of car at the end, must be at least start_soc or greater
 	-- must also be a valid percentage, same as start_soc
-	energy_delivered DECIMAL(6,3) NOT NULL CHECK energy_delivered >= 0,
+	energy_delivered DECIMAL(6,3) NOT NULL CHECK (energy_delivered >= 0),
 	-- energy used in the charging process
 	-- assume battery capacity no more than 1000 kwh and precision of wh
-	price_per_kwh DECIMAL(5,3) NOT NULL CHECK price_per_kwh >= 0,
+	price_per_kwh DECIMAL(5,3) NOT NULL CHECK (price_per_kwh >= 0),
 	-- price paid by the customer per kwh
 	-- assume price no more than 100 with two decical precision
-	money_preblocked DECIMAL(5,2) NOT NULL CHECK money_preblocked >= 0,
+	money_preblocked DECIMAL(5,2) NOT NULL CHECK (money_preblocked >= 0),
         -- amount of customer money reserved at the start
 	-- assume we dont want to reserve more than 1000 euros
 	user_id INT NOT NULL,
 	-- each charging session is associated with a user
-	session_progress INT DEFAULT 100 CHECK session_progress BETWEEN 0 AND 100,
+	session_progress INT DEFAULT 100 CHECK (session_progress BETWEEN 0 AND 100),
 	-- progress of each session
 
 	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id)
