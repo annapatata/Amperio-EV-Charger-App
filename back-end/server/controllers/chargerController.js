@@ -3,7 +3,7 @@ const { formatTimestamp } = require('../utils/dateUtils');
 const { parseUrlDate } = require('../utils/dateUtils');
 
 // Define the valid statuses based on your requirements
-const VALID_STATUSES = ['available', 'charging', 'reserved', 'out_of_order'];
+const VALID_STATUSES = ['available', 'charging', 'reserved', 'offline', 'malfucntion'];
 
 const getPoints = async (req, res, next) => {
     try {
