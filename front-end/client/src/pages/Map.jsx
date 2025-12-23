@@ -1,8 +1,11 @@
 import {useState, useEffect} from "react";
-import Navbar from "../components/layout/navbar";
+import FloatingSearch from "../components/layout/FloatingSearch"; 
+import BrandingIsland from "../components/layout/BrandingIsland";
+import UserIsland from "../components/layout/UserIsland";
 import MapView from "../components/map/mapview";
 import StationDetails from "../components/map/StationDetails";
 import 'leaflet/dist/leaflet.css';
+import '../styles/MapOverlay.css';
 
 export default function Map() {
   const [selectedStation, setSelectedStation] = useState(null);
@@ -34,9 +37,16 @@ export default function Map() {
 
   return (
     <>
-      <Navbar />
-      <div style={{ position: "relative" ,height: "calc(100vh - 56px)", marginTop: "56px" ,width: "100vw", }}>
-        {/* Pass the setter function to the Map */}
+      <div style={{ position: "relative" ,height: "100vh" ,width: "100vw", overflow: "hidden"}}>
+        {/*the floating UI layer*/}
+        {/*these will sit on top of the map because of their z-index*/}
+        <div className="map-overlay-wrapper"> 
+        <BrandingIsland />
+        <FloatingSearch on Search = {(query) =>console.log(query)} />
+        <UserIsland />
+        </div>
+        
+        {/* the map */}
         <MapView stations = {stations} onStationClick={handleMarkerClick} />
         
         {/* The Sliding Side Block & Overlay */}

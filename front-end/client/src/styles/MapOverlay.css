@@ -1,0 +1,192 @@
+/* The parent container that holds all floating items */
+.map-overlay-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* VERY IMPORTANT: allows you to click the map behind the gaps */
+    z-index: 1000; /* Keeps everything above Leaflet layers */
+}
+
+/* Individual islands need to "turn back on" pointer events so you can click buttons */
+.branding-island, 
+.search-filter-container, 
+.user-island {
+    position: absolute;
+    pointer-events: auto; 
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* 1. TOP LEFT: Branding */
+/* Update your branding-island class */
+.branding-island {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    
+    /* FIX: Ensure it only takes up the space it needs */
+    width: auto; 
+    height: auto;
+    display: flex;
+    align-items: center;
+    
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* FIX: Explicitly set your mascot size here */
+.mascot-img {
+    width: 70px;  /* Change this number to make the logo/mascot smaller */
+    height: 70px; 
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+/* 2. TOP CENTER: Search and Pills */
+.search-filter-container {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* Centers the search bar */
+    width: 100%;
+    max-width: 480px;
+    background: transparent; /* Transparent so map shows between search and pills */
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-bar {
+    width: 100%;
+    background: rgb(240, 232, 150);
+    padding: 10px 20px;
+    border-radius: 30px;
+    
+    /* Change white shadow to a soft dark shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+    
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Optional: tiny border for definition */
+}
+
+/* Inner search bar style */
+/* This targets the actual text box inside your search bar */
+.search-bar input {
+    background: transparent; /* Makes it blend with your yellow background */
+    border: none;             /* Removes the default browser border */
+    outline: none;            /* Removes the blue/black ring when you click to type */
+    
+    /* Font & Size Fixes */
+    font-family: 'Inter', sans-serif; /* Or your preferred font */
+    font-size: 16px;                 /* Standard readable size */
+    color: #333;                     /* Dark grey text for better contrast on yellow */
+    
+    width: 100%;                     /* Makes sure the text area fills the bar */
+    margin-left: 10px;               /* Space between your icon and text */
+}
+
+/* Optional: Change the color of the "Placeholder" text */
+.search-bar input::placeholder {
+    color: rgba(0, 0, 0, 0.4);       /* Faded version of your text color */
+}
+
+.user-island {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px; /* Space between Login and Sign Up rectangles */
+}
+
+.user-btn {
+    /* Existing rectangular styles */
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 10px 30px;
+    border-radius: 10px; /* Rectangular look */
+    
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none; /* Removes the blue underline from Links */
+    
+    display: inline-flex;  /* Centers text inside the link-button */
+    align-items: center;
+    justify-content: center;
+    
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.user-btn:hover {
+    background-color: transparent;
+    border-color: rgb(240, 232, 150); /* Highlight with your brand pink */
+    color: rgb(240, 232, 150);
+}
+
+/* Add this to make Sign Up stand out */
+.auth-buttons .user-btn:last-child {
+    background: rgb(240, 232, 150);
+    color: white;
+    border-color: rgb(240, 232, 150);
+}
+/* The Container: Controls the layout and spacing of the pills */
+.filter-pill-container {
+    display: flex;         /* Lays pills out in a row */
+    gap: 10px;            /* The "adequate space" between pills */
+    padding: 5px 0;       /* Optional: space above/below the row */
+    overflow-x: auto;     /* Allows swiping on mobile if there are many pills */
+    width: 100%;          /* Takes full width of the search container */
+    scrollbar-width: none; /* Hides scrollbar on Firefox */
+}
+
+.filter-pill-container::-webkit-scrollbar {
+    display: none;        /* Hides scrollbar on Chrome/Safari */
+}
+
+/* The Pills: Control the look of the buttons */
+.filter-pill {
+    
+    
+    background: white;
+    border: 1px solid #ddd;
+    
+    /* Padding: First number is Top/Bottom, Second is Left/Right */
+    padding: 6px 14px;     
+    
+    border-radius: 20px;   /* Makes them rounded */
+    font-size: 13px;       /* Keeps the text "small" but readable */
+    font-weight: 500;
+    color: #555;
+    
+    white-space: nowrap;   /* Prevents text from wrapping to a second line */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Hover & Active States */
+.filter-pill:hover {
+    border-color: rgb(240, 232, 150); /* Your brand pink */
+    color: rgb(240, 232, 150);
+}
+
+.filter-pill.active {
+    background: rgb(240, 232, 150);
+    color: white;
+    border-color: rgb(240, 232, 150);
+}
