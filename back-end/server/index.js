@@ -15,7 +15,7 @@ const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const stationRoutes = require('./routes/stationRoutes');
-
+const metaRoutes = require('./routes/metaRoutes');
 const app = express();
 
 app.use(cors());
@@ -40,6 +40,7 @@ app.use('/api/newsession', sessionRoutes);
 
 app.use('/api/station',stationRoutes);
 
+app.use('/api/meta',metaRoutes);
 // 404 handler
 app.use((req, res, next) => {
   const error = new Error('Not Found');

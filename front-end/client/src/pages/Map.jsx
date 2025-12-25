@@ -9,7 +9,7 @@ import '../styles/MapOverlay.css';
 
 export default function Map() {
   const [selectedStation, setSelectedStation] = useState(null);
-  const [stations, setStations] = useState([]);
+  const [stations, setStations] = useState([]); /*this stores the filtered station list*/
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -24,6 +24,44 @@ export default function Map() {
     fetchStations();
   }, []);
 
+  // map.jsx
+const [filters, setFilters] = useState({
+  q: "",
+  power: "",
+  connector: "",
+  available: false
+});
+
+const handleSearch = async (updatedFilters) => {
+  const newFilters = { ...filters, ...updatedFilters }; /*merges old filters with new ones so we can check multiple at once*/
+  
+  // Clean the filters: convert undefined or null to empty string
+  const cleanedFilters = Object.fromEntries(
+    Object.entries(newFilters).map(([key, val]) => [key, val ?? ""])
+  );
+  
+  setFilters(newFilters);
+
+  const params = new URLSearchParams(cleanedFilters).toString(); /*This turns { q: "Tesla", power: 50 } into a URL string: ?q=Tesla&power=50.*/
+  const response = await fetch(`http://localhost:9876/api/station/search?${params}`);
+
+  // 1. Check if the response is actually OK (200-299)
+  if (!response.ok) {
+     console.error("Server Error:", response.status);
+     return; 
+  }
+
+  // 2. Check if the response is actually JSON
+  const contentType = response.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text(); // Read the HTML error to see what happened
+      console.error("Received HTML instead of JSON:", text);
+      return;
+  }
+
+  const data = await response.json();
+  setStations(data); /* we update the stations, which are handled by mapview.jsx*/
+};
 
   const handleMarkerClick = async (station) => {
     try {
@@ -42,7 +80,7 @@ export default function Map() {
         {/*these will sit on top of the map because of their z-index*/}
         <div className="map-overlay-wrapper"> 
         <BrandingIsland />
-        <FloatingSearch on Search = {(query) =>console.log(query)} />
+        <FloatingSearch onSearch = {handleSearch} filters={filters} stations={stations} onStationClick={handleMarkerClick} />
         <UserIsland />
         </div>
         

@@ -12,6 +12,7 @@
 /* Individual islands need to "turn back on" pointer events so you can click buttons */
 .branding-island, 
 .search-filter-container, 
+
 .user-island {
     position: absolute;
     pointer-events: auto; 
@@ -33,10 +34,10 @@
     display: flex;
     align-items: center;
     
-    background: transparent;
+    background: none;
     padding: 8px 16px;
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    /*box-shadow: 0 4px 15px rgba(0,0,0,0.1);*/
 }
 
 /* FIX: Explicitly set your mascot size here */
@@ -53,13 +54,15 @@
     left: 50%;
     transform: translateX(-50%); /* Centers the search bar */
     width: 100%;
-    max-width: 480px;
+    max-width: 600px;
     background: transparent; /* Transparent so map shows between search and pills */
-    box-shadow: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    overflow: visible !important;
+    z-index: 2000;
 }
 
 .search-bar {
@@ -102,11 +105,13 @@
     top: 20px;
     right: 20px;
     z-index: 1000;
+    background: transparent;
 }
 
 .auth-buttons {
     display: flex;
     gap: 10px; /* Space between Login and Sign Up rectangles */
+    background: transparent;
 }
 
 .user-btn {
@@ -134,7 +139,11 @@
 .user-btn:hover {
     background-color: transparent;
     border-color: rgb(240, 232, 150); /* Highlight with your brand pink */
-    color: rgb(240, 232, 150);
+    color: rgb(240, 227, 89);
+}
+
+.auth-buttons .user-btn:first-child{
+    background: white;
 }
 
 /* Add this to make Sign Up stand out */
@@ -143,12 +152,16 @@
     color: white;
     border-color: rgb(240, 232, 150);
 }
+
+.auth-buttons .user-btn:last-child:hover{
+    color: rgb(131, 121, 8);
+}
 /* The Container: Controls the layout and spacing of the pills */
 .filter-pill-container {
     display: flex;         /* Lays pills out in a row */
     gap: 10px;            /* The "adequate space" between pills */
     padding: 5px 0;       /* Optional: space above/below the row */
-    overflow-x: auto;     /* Allows swiping on mobile if there are many pills */
+    overflow: visible !important;     /* Allows swiping on mobile if there are many pills */
     width: 100%;          /* Takes full width of the search container */
     scrollbar-width: none; /* Hides scrollbar on Firefox */
 }
@@ -189,4 +202,74 @@
     background: rgb(240, 232, 150);
     color: white;
     border-color: rgb(240, 232, 150);
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    position:absolute;
+    top:110%; /* sits  right under the pill*/
+    left: 0;
+    background: white !important;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index:9999;
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+    color: black;
+}
+
+.dropdown-menu button {
+    padding: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: black;
+}
+
+.dropdown-menu button:hover{
+    background-color:rgb(240, 232, 150) ;
+}
+
+
+.search-bar-wrapper {
+  position: relative; /* So the list positions itself relative to this box */
+  width: 100%;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  margin-top: 5px;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.suggestions-list li {
+  padding: 12px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #666;
+}
+
+.suggestions-list li:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestions-list li b {
+  color: #007bff; /* Highlights the bold parts in blue */
 }

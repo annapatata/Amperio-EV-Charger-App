@@ -28,7 +28,6 @@ export default function MapView({stations, onStationClick}) {
               },
             }}
           >
-            
           </Marker>
         );
       })}
