@@ -1,0 +1,48 @@
+/* Grid Layout */
+.overview {
+  display: grid;
+  /* Columns will be at least 300px wide, otherwise they stack */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* --- CARD STYLING --- */
+/* This applies to all three card types */
+.kpi-card, .reservation, .charger-power {
+  background-color: #ffffff; /* WHITE Background */
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 25px;
+  
+  /* Shadow to make it pop off the page */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  
+  /* Flex to stack title and value vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Card Titles (e.g. "Total Sessions") */
+.overview h3 {
+  color: #6b7280; /* Gray text */
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px 0;
+}
+
+/* Big Numbers */
+.kpi-value, .default-power {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111827; /* Very dark blue/black */
+  margin: 0;
+}
+
+/* Reservation Text */
+.rsv-info {
+  margin: 5px 0;
+  font-size: 1.1rem;
+  color: #374151;
+}

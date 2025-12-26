@@ -15,7 +15,10 @@ const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const stationRoutes = require('./routes/stationRoutes');
-const metaRoutes = require('./routes/metaRoutes');const requestedRoutes = require('./routes/requestedRoutes');
+const metaRoutes = require('./routes/metaRoutes');
+const requestedRoutes = require('./routes/requestedRoutes');
+const userStatsRoutes = require('./routes/userStatsRoutes');
+const reservationsRoutes = require('./routes/reservationsRoutes');
 
 const app = express();
 
@@ -29,6 +32,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/station', stationRoutes);
+app.use('/api/reservations', reservationsRoutes);
+app.use('/api/userStats', userStatsRoutes);
 // lame clownish goofy-ass mount
 app.use('/api', requestedRoutes);
 
