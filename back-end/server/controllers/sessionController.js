@@ -1,29 +1,142 @@
 const Session = require('../models/sessionModel');
+const Charger = require('../models/chargerModel');
 const { formatTimestamp } = require('../utils/dateUtils');
 const { parseUrlDate } = require('../utils/dateUtils');
+const { validateType } = require('../utils/validateUtils');
+const { castType } = require('../utils/sanitizeUtils');
+
+const throwErrorLog = (res, next, stast, msg) =>
+{
+	res.status(stat);
+        const error = new Error (msg);
+	return next (error);
+}
 
 const newSession = async (req, res, next) =>
 {
 	try
 	{
 		//check if body is empty
-		if (req.body == null)
+		if( validateType(req.body, "null") )
 		{
-			res.status(400);
-			const error = new Error (`No body was given for the call`);
-			next (error);
+                        res.status(400);
+                        const error = new Error (`body missing`);
+                        return next (error);
 		}
 
 		//deconstruct body tuple
 		const { pointid, starttime, endtime, startsoc, endsoc, totalkwh, kwhprice, amount } = req.body;
 
-		//check id was given
-		if (pointid == null)
+		//check pointid was given
+		if ( validateType(pointid, "null") )
 		{
 			res.status(400);
-			const error = new Error (`No charger id was given`);
-			next (error);
+			const error = new Error (`charger ID missing`);
+			return next (error);
 		}
+		
+		//check that pointid is integer
+		if ( !validateType(pointid, "integer") )
+		{
+			res.status(400);
+			const error = new Error (`charger ID must be integer`);
+                        return next (error);
+		}
+		//convert pointid to integer
+		const numChargerID = castType(pointid, "integer");
+
+		//check charger exists in database
+		if ( validateType( await Charger.getById(numChargerID), "null") )
+		{
+			res.status(400);
+                        const error = new Error (`charger doesn't exist`);
+                        return next (error);
+		}
+
+		//check starttime was given
+                if ( validateType(starttime, "null") )
+                {
+                        res.status(400);
+                        const error = new Error (`start timestamp missing`);
+                        return next (error);
+                }
+
+		//check if it is string
+		if( !validateType(starttime, "string") )
+		{
+			res.status(400);
+		}
+		//extract valid timestamp
+
+		//check endtime was given
+                if ( validateType(endtime, "null") )
+                {
+                        res.status(400);
+                        const error = new Error (`end timestamp missing`);
+                        return next (error);
+                }
+
+		//check startsoc was given
+                if ( validateType(startsoc, "null") )
+                {
+                        res.status(400);
+                        const error = new Error (`startsoc missing`);
+                        return next (error);
+                }
+
+		//check startsoc is integer
+                if ( !validateType(startsoc, "integer") )
+                {
+                        res.status(400);
+                        const error = new Error (`startsoc must be integer`);
+                        return next (error);
+                }
+
+		//convert startsoc to integer
+		const numStartSoc = castType(startsoc, "integer");
+
+		//startsoc must be between 0 and 100
+		if (numStartSoc < 0 || numStartSoc > 100)
+		{
+			res.status(400);
+			const error = new Error (`startsoc must be between 0 and 100`);
+                        return next (error);
+		}
+
+		//check endsoc was given
+                if ( validateType(endsoc, "null") )
+                {
+                        res.status(400);
+                        const error = new Error (`endsoc missing`);
+                        return next (error);
+                }
+
+                //check endsoc is integer
+                if ( !validateType(endsoc, "integer") )
+                {
+                        res.status(400);
+                        const error = new Error (`endsoc must be integer`);
+                        return next (error);
+                }
+
+		//convert endsoc to integer
+                const numEndSoc = castType(endsoc, "integer");
+
+		//endsoc must be between 0 and 100
+                if (numEndSoc < 0 || numEndSoc > 100)
+                {
+                        res.status(400);
+                        const error = new Error (`end must be between 0 and 100`);
+                        return next (error);
+		}
+
+		//check endsoc >= startsoc
+                if ( numStartSoc > numEndSoc )
+                {
+                        res.status(400);
+                        const error = new Error (`startsoc must be less than or equal to endsoc`);
+                        return next (error);
+                }
 
 		//success, return empty body
 		return res.status(200).json();
