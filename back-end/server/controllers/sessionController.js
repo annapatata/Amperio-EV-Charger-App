@@ -86,6 +86,17 @@ const newSession = async (req, res, next) =>
                         return next (new Error ("amount not equal to totalkwh * kwhprice"));
 		};
 
+		//check if session already exists
+		const searchDupSession = await Session.searchSession(numChargerID, validStartTime);
+
+		if (searchDupSession != null)
+		{
+			res.status(400);
+			return next (new Error ("session already exists, no duplicates allowed"));
+		}
+
+		const resp = await Session.createSession(numChargerID, validStartTime, validEndTime, numStartSoc, numEndSoc, totalkwh_str, kwhprice_str);
+
 		//success, return empty body
 		return res.status(200).json();
 	}
