@@ -132,7 +132,7 @@ CREATE TABLE Session(
 	-- end time of a session, must be greater than start_time
 	start_soc INT NOT NULL CHECK (start_soc BETWEEN 0 AND 100),
 	-- battery percent of car at the start
-	end_soc INT NOT NULL,
+	end_soc INT NOT NULL CHECK (end_soc BETWEEN 0 AND 100),
 	-- battery oercent of car at the end, must be at least start_soc or greater
 	-- must also be a valid percentage, same as start_soc
 	energy_delivered DECIMAL(6,3) NOT NULL CHECK (energy_delivered >= 0),
@@ -155,8 +155,10 @@ CREATE TABLE Session(
 	FOREIGN KEY (user_id) REFERENCES Users(user_id)
 	ON UPDATE CASCADE ON DELETE RESTRICT,
 	-- user exists
-     CHECK (end_time > start_time),
-	 CHECK ((end_soc >= start_soc) AND (end_soc BETWEEN 0 AND 100))
+     	CHECK (end_time > start_time),
+	CHECK (end_soc >= start_soc),
+	-- no two sessions at the same time and the same charger
+	UNIQUE (charger_id, start_time)
 );
 
 -- ---------------------------------------------------

@@ -27,6 +27,14 @@ class sessionModel
 		const [result] = await db.query(sql, [id, startTime]);
 		return result[0] || null;
 	}
+
+	static async rangeSessionSearch(id, startTime, endTime)
+	{
+		const sql = 'SELECT starttime, endtime, startsoc, endsoc, totalkwh, kwhprice, Amount ' +
+			    'FROM Sessions WHERE charger_id = ? AND starttime >= ? AND endtime <= ?';
+		const [rows] = await db.query(sql, [id, startTime, endTime]);
+		return rows;
+	}
 }
 
 module.exports = sessionModel;
