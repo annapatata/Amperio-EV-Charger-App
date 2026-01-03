@@ -1,5 +1,7 @@
 const path = require('path');
 const fs = require('fs').promises;
+const csv = require('csv-parser');
+const { Readable } = require('stream');
 const Station = require('../models/stationModel');
 const Charger = require('../models/chargerModel');
 const db = require('../config/db');
@@ -57,9 +59,72 @@ const resetpoints = async (req, res, next) => {
     }
 };
 
-/*const addpoints = async (req, res, next) => {
-*/    
+const addpoints = async (req, res, next) => {
+    //check if file exists 
+    if (!req.file) {  
+        res.status(400);
+        return next(new Error('No file uploaded'));
+    }
 
-module.exports = { resetpoints };
+    if (req.file.mimetype !== 'text/csv') {
+        res.status(400);
+        return next(new Error("Invalid file type. Only 'text/csv' is supported."));
+    }
+
+    let connection;
+    try {
+        const stationsMap = new Map();
+        const stream = Readable.from(req.file.buffer.toString());
+
+        await new Promise((resolve, reject) => {
+            stream
+                .pipe(csv())
+                .on('data', (row) => {
+                    const sId = row.id;
+                    if (!stationsMap.has(sId)) {
+                        stationsMap.set(sId, {
+                            id: sId,
+                            name:row.name,
+                            address: row.address,
+                            latitude: row.latitude,
+                            longitude: row.longitude,
+                            stations: [{ outlets: [] }] // Nesting to satisfy your JsonToDb logic
+                        });
+                    }
+                    stationsMap.get(sId).stations[0].outlets.push({
+                        id: row.outlet_id 
+                    });
+                })
+                .on('end', resolve)
+                .on('error', reject);
+        });
+
+        connection = await db.getConnection();
+        await connection.beginTransaction();
+
+        for (const entry of stationsMap.values()) {
+            const { stationData, chargers } = JsonToDb(entry);
+
+            await Station.create(stationData, connection);
+
+            for (const chargerData of chargers) {
+                await Charger.create(chargerData, connection);
+            }
+        }
+
+        await connection.commit();
+        return res.status(200).json({
+            status: "OK",
+            message: `Successfully imported ${stationsMap.size} stations.`
+        });
+        } catch (error) {
+        if (connection) await connection.rollback();
+        next(error); 
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
+module.exports = { resetpoints , addpoints};
 
     
