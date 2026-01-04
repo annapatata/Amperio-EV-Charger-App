@@ -14,6 +14,35 @@ const ConnectorIcon = ({ type }) => {
   }
 };
 
+
+const Score = ({ value }) => {
+  const stars = [];
+  const numericValue = Number(value) || 0; // Ensure it's a number
+
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(numericValue)) {
+      stars.push(<span key={i} className="star filled">★</span>);
+    } else if (i - numericValue < 1) {
+      stars.push(
+        <span key={i} className="star half-filled">
+          ★
+        </span>
+      );
+    } else {
+      stars.push(<span key={i} className="star">☆</span>);
+    }
+  }
+
+  return (
+    <div className="score-wrapper">
+      <div className="stars-row">{stars}</div>
+      <span className="score-number">
+        {numericValue.toFixed(1)} / 5
+      </span>
+    </div>
+  );
+};
+
 export default function StationDetails({ station, onClose }) {
 
   //check if a station doesnt have any chargers yet 
@@ -36,7 +65,7 @@ export default function StationDetails({ station, onClose }) {
         <div className="drawer-header">
           <h2>{station.station_name || station.address}</h2>
           {station.name && (
-            <p className="station-address" style={{ margin: 0, color: '#666' }}>{station.address}</p>
+            <p className="station-address" style={{ margin: 0, color: '#f6cc41ff' }}>{station.address}</p>
           )}
           {station.address && (
            <p className="station-subtitle" style={{ margin: "4px 0 0 0", color: "#666", fontSize: "0.95rem" }}>
@@ -45,7 +74,8 @@ export default function StationDetails({ station, onClose }) {
            )}
        <button className="close-btn" onClick={onClose}>×</button>
         </div>
-
+          
+        <Score value={station.score || 0} />
         <p className="facilities"> <strong>Nearby:</strong> {station.facilities || "N/A"}</p>
 
         <div className="charger-list">

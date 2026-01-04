@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../../styles/FacilitiesGrid.css";
 
 export default function FloatingSearch({ onSearch, filters,stations, onStationClick}) {
-  const [options, setOptions] = useState({ connectors: [], powers: [], facilities: [] });
+  const [options, setOptions] = useState({ connectors: [], powers: [], facilities: [],score:[] });
   const [openDropdown, setOpenDropdown] = useState(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -186,6 +186,39 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
             </div>
           )}
         </div>
+
+        {/* Score Pill */}
+        <div className="dropdown-wrapper">
+          <button 
+            className={`filter-pill ${filters.score?.length ? 'active' : ''}`} 
+            onClick={() => toggleDropdown('score')}
+          >
+            Score {filters.score?.length >0 ? `: ${filters.score.map(s=>`${s}+ stars`).join(', ')}` : ''}
+          </button>
+
+          {openDropdown === 'score' && (
+            <div className="dropdown-menu">
+              {options?.score?.map((s, index) => (
+                <button 
+                  key={index} 
+                  //check if s is in the array to keep it yellow
+                  className={filters.score?.includes(s) ? 'selected' : ''}
+                  onClick={() => {
+                    const current = filters.score || [];
+                    const next = current.includes(s)
+                      ? current.filter(item => item !== s) //remove if already there
+                      : [...current, s]; //add if not present
+                    onSearch({ score: next });
+            
+                  }}
+                > 
+                  {s}+ stars 
+                </button> 
+              ))} 
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

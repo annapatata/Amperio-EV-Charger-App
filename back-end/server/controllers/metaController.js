@@ -1,5 +1,6 @@
 const db = require('../config/db');
-const { FACILITIES } = require('../utils/dataFormatter');
+const { FACILITIES , RATINGS } = require('../utils/dataFormatter');
+
 
 const getFilterOptions = async (req, res,next) => {
     try {
@@ -9,7 +10,8 @@ const getFilterOptions = async (req, res,next) => {
         res.status(200).json({
             connectors: connectors,
             powers: powers,
-            facilities: FACILITIES
+            facilities: FACILITIES,
+            score: RATINGS
         });
     }
     catch (error){

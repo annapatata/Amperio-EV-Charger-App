@@ -210,3 +210,47 @@
   color: rgb(193, 184, 84);
   border: 1px solid rgb(193, 184, 84);
 }
+
+.station-address {
+  color: rgb(193, 184, 84);
+}
+
+.score-wrapper {
+  display: flex;
+  align-items: center; /* Vertically centers stars and text */
+  gap: 10px;           /* Space between stars and the "/ 5" text */
+  margin-bottom: 12px;
+}
+
+.stars-row {
+  display: flex;
+  font-size: 1.2rem;
+  color: #ccc;         /* Color for empty stars */
+}
+
+.star.filled {
+  color: #f6cc41ff;    /* Your dark yellow color */
+}
+
+.star.half-filled {
+  position: relative;
+  display: inline-block;
+  color: #ccc;
+}
+
+.star.half-filled::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;          /* Adjust this if you want dynamic half-fills */
+  overflow: hidden;
+  color: #f6cc41ff;
+}
+
+.score-number {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;         /* Subtle dark grey for the text */
+  padding-top: 2px;    /* Slight alignment tweak */
+}

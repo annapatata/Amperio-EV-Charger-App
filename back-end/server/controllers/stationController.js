@@ -4,7 +4,7 @@ const db = require('../config/db');
 
 const searchStations = async (req, res, next) => {
     try {
-        const { q, power, connector, available, facilities } = req.query;
+        const { q, power, connector, available, facilities,score } = req.query;
 
         // Using LEFT JOIN ensures stations show up even if chargers aren't fully mapped
         let queryText = `
@@ -13,6 +13,7 @@ const searchStations = async (req, res, next) => {
                 s.latitude, 
                 s.longitude,
                 s.facilities,
+                s.score,
                 CASE 
                     WHEN SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0 THEN 'available'
                     WHEN SUM(CASE WHEN ch.charger_status = 'charging' THEN 1 ELSE 0 END) > 0 THEN 'charging'
@@ -78,6 +79,22 @@ const searchStations = async (req, res, next) => {
                 });
             }
         }
+
+        //6. Score Filter
+        // 6. Score Filter - Selects stations with score >= lowest selected value
+if (req.query.score && req.query.score !== "" && req.query.score !== 'undefined') {
+    const scoreArray = req.query.score.split(',')
+        .map(s => Number(s.trim()))
+        .filter(s => !isNaN(s));
+
+    if (scoreArray.length > 0) {
+        // Find the lowest score selected (e.g., if user picks 3 and 4, we want >= 3)
+        const minScore = Math.min(...scoreArray);
+        
+        queryText += ` AND s.score >= ?`;
+        queryParams.push(minScore);
+    }
+}
 
         // 2. Add the GROUP BY so the aggregate functions (SUM) work
         queryText += ` GROUP BY s.station_id`;

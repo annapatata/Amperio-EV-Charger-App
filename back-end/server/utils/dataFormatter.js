@@ -22,6 +22,8 @@ const CHARGER_CONFIGS = [
 
 const CHARGER_STATUS = ['available', 'charging', 'reserved', 'malfunction', 'offline'];
 
+const RATINGS = [1, 2, 3, 4];
+
 //extraction function
 const JsonToDb = (entry) => {
     // extract postal code from address 
@@ -71,4 +73,4 @@ const JsonToDb = (entry) => {
     return { stationData, chargers };
 };
 
-module.exports = { JsonToDb, FACILITIES };
+module.exports = { JsonToDb, FACILITIES, RATINGS };

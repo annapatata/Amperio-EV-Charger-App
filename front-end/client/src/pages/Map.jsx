@@ -30,7 +30,8 @@ const [filters, setFilters] = useState({
   power: [],
   connector: [],
   available: false,
-  facilities: []
+  facilities: [],
+  score : []
 });
 
 const handleSearch = async (updatedFilters) => {

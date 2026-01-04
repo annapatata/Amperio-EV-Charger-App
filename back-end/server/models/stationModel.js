@@ -8,6 +8,7 @@ class StationModel {
             s.address, 
             s.latitude, 
             s.longitude,
+            s.score,
             CASE 
                 WHEN SUM(CASE WHEN c.charger_status = 'available' THEN 1 ELSE 0 END) > 0 THEN 'available'
                 WHEN SUM(CASE WHEN c.charger_status = 'charging' THEN 1 ELSE 0 END) > 0 THEN 'charging'
@@ -44,6 +45,7 @@ class StationModel {
             facilities: rows[0].facilities,
             lat: rows[0].latitude,
             lng: rows[0].longitude,
+            score: rows[0].score,
             chargers: rows.filter(r => r.charger_id !== null).map(r => ({
                 charger_id: r.charger_id,
                 power: r.power,
