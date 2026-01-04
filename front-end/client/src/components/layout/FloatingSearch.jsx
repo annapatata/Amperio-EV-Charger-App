@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import "../../styles/FacilitiesGrid.css";
 
 export default function FloatingSearch({ onSearch, filters,stations, onStationClick}) {
-  const [options, setOptions] = useState({ connectors: [], powers: [] });
+  const [options, setOptions] = useState({ connectors: [], powers: [], facilities: [] });
   const [openDropdown, setOpenDropdown] = useState(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -84,13 +85,15 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
         )}
       </div>
       <div className="filter-pill-container">
+
+
         {/* Power Pill */}
         <div className="dropdown-wrapper">
           <button 
-            className={`filter-pill ${filters.power ? 'active' : ''}`} 
+            className={`filter-pill ${filters.power?.length ? 'active' : ''}`} 
             onClick={() => toggleDropdown('power')}
           >
-            Power {filters.power ? `: ${filters.power}kW` : ''}
+            Power {filters.power?.length >0 ? `: ${filters.power.map(p=>`${p}kW`).join(', ')}` : ''}
           </button>
           
           {openDropdown === 'power' && (
@@ -98,10 +101,15 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
               {options?.powers?.map((p, index) => (
                 <button 
                   key={index} // p is just a number (e.g., 50)
-                  className={filters.power === p ? 'selected' : ''}
+                  //check if p is in the array to keep it yellow
+                  className={filters.power?.includes(p) ? 'selected' : ''}
                   onClick={() => {
-                    toggleFilter('power', p); // Pass the number p directly
-                    setOpenDropdown(null);
+                    const current = filters.power || [];
+                    const next = current.includes(p)
+                      ? current.filter(item => item !== p) //remove if already there
+                      : [...current, p]; //add if not present
+                    onSearch({ power: next });
+            
                   }}
                 > 
                   {p} kW 
@@ -114,21 +122,24 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
         {/* Connector Pill */}
         <div className="dropdown-wrapper">
           <button 
-            className={`filter-pill ${filters.connector ? 'active' : ''}`} 
+            className={`filter-pill ${filters.connector?.length>0 ? 'active' : ''}`} 
             onClick={() => toggleDropdown('connector')}
           >
-            Connector {filters.connector ? `: ${filters.connector}` : ''}
+            Connector {filters.connector?.length >0 ? `: ${filters.connector.join(', ')}` : ''}
           </button>
           
           {openDropdown === 'connector' && (
             <div className="dropdown-menu">
               {options?.connectors?.map((c, index) => (
               <button 
-                key={index} // c is just a string (e.g., "CCS2")
-                className={filters.connector === c ? 'selected' : ''}
+                key={index} 
+                className={filters.connector?.includes(c) ? 'selected' : ''}
                 onClick={() => {
-                  toggleFilter('connector', c); // Pass the string c directly
-                  setOpenDropdown(null);
+                  const current = filters.connector || [];
+                  const next = current.includes(c)
+                    ? current.filter(item => item !== c) //remove if already there
+                    : [...current, c];
+                  onSearch({ connector: next });
                 }}
               >
                 {c}
@@ -144,6 +155,37 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
         >
           Available Now
         </button>
+
+        {/* Facilities Pill */}
+        <div className="dropdown-wrapper">
+          <button 
+            className={`filter-pill ${filters.facilities && filters.facilities.length > 0 ? 'active' : ''}`} 
+            onClick={() => toggleDropdown('facilities')}
+          >
+            Facilities {filters.facilities && filters.facilities.length > 0 ? `(${filters.facilities.length})` : ''}
+          </button>
+          
+          {openDropdown === 'facilities' && (
+            <div className="dropdown-menu facilities-grid">
+              {options?.facilities?.map((f, index) => (
+                <label key={index} className="facility-checkbox-item">
+                  <input 
+                    type="checkbox"
+                    checked={filters.facilities && filters.facilities.includes(f) || false}
+                    onChange={() => {
+                      const current = filters.facilities || [];
+                      const next = current.includes(f)
+                        ? current.filter(item => item !== f)
+                        : [...current, f];
+                      onSearch({ facilities: next });
+                    }}
+                  />
+                  <span>{f}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

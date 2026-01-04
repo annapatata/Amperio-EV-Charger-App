@@ -27,17 +27,26 @@ export default function Map() {
   // map.jsx
 const [filters, setFilters] = useState({
   q: "",
-  power: "",
-  connector: "",
-  available: false
+  power: [],
+  connector: [],
+  available: false,
+  facilities: []
 });
 
 const handleSearch = async (updatedFilters) => {
   const newFilters = { ...filters, ...updatedFilters }; /*merges old filters with new ones so we can check multiple at once*/
   
+  // Convert facilities array to comma-separated string for URL
+  const filterForURL = { ...newFilters };
+  if (Array.isArray(filterForURL.facilities) && filterForURL.facilities.length > 0) {
+    filterForURL.facilities = filterForURL.facilities.join(',');
+  } else {
+    filterForURL.facilities = '';
+  }
+  
   // Clean the filters: convert undefined or null to empty string
   const cleanedFilters = Object.fromEntries(
-    Object.entries(newFilters).map(([key, val]) => [key, val ?? ""])
+    Object.entries(filterForURL).map(([key, val]) => [key, val ?? ""])
   );
   
   setFilters(newFilters);

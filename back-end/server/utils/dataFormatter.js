@@ -60,9 +60,9 @@ const JsonToDb = (entry) => {
                 power: randomCfg.power,
                 connector_type: randomConnector,
                 station_id: entry.id,
-                installed_at: new Date().toISOString(),
-                last_checked: new Date().toISOString(),
-                charger_status: CHARGER_STATUS[Math.floor(Math.random() * CHARGER_STATUS.length)],
+                installed_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                last_checked: new Date().toISOString().slice(0, 19).replace('T', ' '),
+             charger_status: CHARGER_STATUS[Math.floor(Math.random() * CHARGER_STATUS.length)],
                 current_price: null
             });
         });
@@ -71,4 +71,4 @@ const JsonToDb = (entry) => {
     return { stationData, chargers };
 };
 
-module.exports = { JsonToDb };
+module.exports = { JsonToDb, FACILITIES };
