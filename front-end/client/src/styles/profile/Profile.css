@@ -1,7 +1,17 @@
 /* Container for the whole profile page */
 .profile-container {
-  width: 100%;       
-  max-width: none;   
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 100;
+
+  /* UPDATED: Gradient matching the map/login (Sage Green to Light Beige) */
+  background: linear-gradient(135deg, #c0bea0 0%, #F5F5DC 100%);
+  background-size: cover;
+
   padding: 2rem 4rem;
   box-sizing: border-box;  
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,7 +25,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Softer border */
 }
 
 .header-left h1 {
@@ -27,7 +37,7 @@
 
 .subtitle {
   margin: 0.5rem 0 0;
-  color: #7f8c8d;
+  color: #555; /* Slightly darker for contrast */
   font-size: 0.95rem;
 }
 
@@ -40,23 +50,27 @@
 button {
   cursor: pointer;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px; /* Match Login/Map radius */
   padding: 0.6rem 1.2rem;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
+/* Updated Map Button to match Theme Yellow */
 .btn-map {
-  background-color: #3498db;
-  color: white;
+  background-color: #F3D55B;
+  color: #333;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .btn-map:hover {
-  background-color: #2980b9;
+  background-color: #ecd055;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-logout {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent */
   border: 1px solid #e74c3c;
   color: #e74c3c;
 }
@@ -71,12 +85,12 @@ button {
   display: flex;
   gap: 2rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .btn-tab {
   background: none;
-  color: #7f8c8d;
+  color: #666;
   padding: 0.8rem 0;
   border-radius: 0;
   position: relative;
@@ -84,22 +98,22 @@ button {
 }
 
 .btn-tab:hover {
-  color: #3498db;
+  color: #333;
 }
 
-/* Active Tab Indicator */
+/* Active Tab Indicator - Updated to Theme Yellow/Gold */
 .btn-tab.active {
-  color: #3498db;
+  color: #b59f0b; /* Darker yellow/gold for text readability */
 }
 
 .btn-tab.active::after {
   content: '';
   position: absolute;
-  bottom: -2px; /* Overlaps the wrapper border */
+  bottom: -2px; 
   left: 0;
   width: 100%;
-  height: 2px;
-  background-color: #3498db;
+  height: 3px; /* Slightly thicker */
+  background-color: #F3D55B; /* Theme Yellow */
 }
 
 /* --- Content Area --- */
@@ -116,7 +130,7 @@ button {
   align-items: center;
   height: 50vh;
   font-size: 1.2rem;
-  color: #7f8c8d;
+  color: #555;
 }
 
 .error-screen {
@@ -130,6 +144,9 @@ button {
 
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
+  .profile-container {
+      padding: 1.5rem; /* Less padding on mobile */
+  }
   .profile-header {
     flex-direction: column;
     align-items: flex-start;

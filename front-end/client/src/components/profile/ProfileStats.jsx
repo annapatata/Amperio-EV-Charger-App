@@ -92,7 +92,7 @@ const ProfileStats = () => {
   if (loading) return <div className="loading-screen">Loading...</div>;
 
   return (
-    <div className="stats">
+    <div className="stats-grid">
       {/* 1. Money/month chart */}
       <div className="chart-card">
         <h3>Money Spent / Month</h3>
