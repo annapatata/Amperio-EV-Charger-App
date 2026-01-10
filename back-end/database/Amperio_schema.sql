@@ -42,23 +42,13 @@ CREATE TABLE Charger (
 -- Table PricingHistory (for the admins)
 -- -----------------------------------------------------
 
-CREATE TABLE PricingHistory (
-	pricing_id INT AUTO_INCREMENT PRIMARY KEY,
-	charger_id INT,
-	power INT,
-	start_time DATETIME NOT NULL,
-	end_time DATETIME NOT NULL, 
-	base_price DECIMAL(5,3) NOT NULL,  
-	wholesale_price DECIMAL(5,3) NOT NULL,
-	final_price DECIMAL(5,3) NOT NULL,
-	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id)
-	ON UPDATE CASCADE ON DELETE RESTRICT
-
+CREATE TABLE EnergyPricingHistory (
+	history_id INT AUTO_INCREMENT PRIMARY KEY,
+	time_ref TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	current_price DECIMAL(5,3) 
 );
 
-
-
--- -----------------------------------------------------
+------------------------------------------------------
 -- Table Account
 -- -----------------------------------------------------
 CREATE TABLE Users(
@@ -73,6 +63,7 @@ CREATE TABLE Users(
 	card_cvv decimal(3,0),
 	-- ----------------------------
 	default_charger_power INT,
+	default_connector_type enum('Type 2', 'CCS2', 'CHAdeMO', 'CCS1'),
 	created_at timestamp not null default current_timestamp,
 	role enum('user', 'admin') not null
 
@@ -118,6 +109,8 @@ CREATE TABLE Session(
 	price_per_kwh DECIMAL(5,3) NOT NULL CHECK (price_per_kwh >= 0),
 	-- price paid by the customer per kwh
 	-- assume price no more than 100 with two decical precision
+	wholesale_cost DECIMAL(8,3) NOT NULL CHECK (wholesale_cost >= 0),
+	-- cost incurred by the company for this session
 	money_preblocked DECIMAL(5,2) NOT NULL CHECK (money_preblocked >= 0),
         -- amount of customer money reserved at the start
 	-- assume we dont want to reserve more than 1000 euros

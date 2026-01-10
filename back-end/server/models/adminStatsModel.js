@@ -3,21 +3,19 @@ const db = require('../config/db');
 class AdminStatsModel {
     
    static async MonthlyFinancial(monthsLimit = 12) {
-        const sql = `
-            SELECT 
-                DATE_FORMAT(s.start_time, '%b %Y') AS month_label,
-                SUM(s.energy_delivered * s.price_per_kwh) AS revenue,
-                SUM(s.energy_delivered * ph.wholesale_price) AS cost
-            FROM Session s
-            JOIN PricingHistory ph ON s.charger_id = ph.charger_id 
-                AND s.start_time BETWEEN ph.start_time AND ph.end_time
-            WHERE s.start_time >= DATE_SUB(NOW(), INTERVAL ? MONTH)
-            GROUP BY month_label, YEAR(s.start_time), MONTH(s.start_time)
-            ORDER BY YEAR(s.start_time), MONTH(s.start_time)
-        `;
-        const [rows] = await db.execute(sql, [monthsLimit]);
-        return rows;
-    }
+    const sql = `
+        SELECT 
+            DATE_FORMAT(start_time, '%b %Y') AS month_label,
+           ROUND(SUM(energy_delivered * price_per_kwh), 2) AS revenue,
+            ROUND(SUM(wholesale_cost), 2) AS cost
+        FROM Session
+        WHERE start_time >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+        GROUP BY YEAR(start_time), MONTH(start_time), month_label
+        ORDER BY YEAR(start_time), MONTH(start_time)
+    `;
+    const [rows] = await db.execute(sql, [monthsLimit]);
+    return rows;
+}
 
     static async RevenueByStation() {
         const query = `
@@ -39,7 +37,7 @@ class AdminStatsModel {
             SELECT 
                 DAYNAME(start_time) AS day,
                 HOUR(start_time) AS hour,
-                SUM(energy_delivered) AS total_energy
+                ROUND(AVG(energy_delivered), 2) AS average_energy
             FROM Session
             GROUP BY day, hour
             ORDER BY FIELD(day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), hour

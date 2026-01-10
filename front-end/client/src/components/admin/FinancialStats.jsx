@@ -86,7 +86,13 @@ const FinancialTab = ({ data }) => {
                 <ResponsiveContainer width="100%" height="90%">
                   <BarChart layout="vertical" data={stationData} margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#dcdcdc" />
-                    <XAxis type="number" hide />
+                    <XAxis 
+                      type="number" 
+                      tick={{fill: '#555', fontSize: 12}} 
+                      axisLine={false} 
+                      tickLine={false}
+                      tickFormatter={(value) => `€${value}`} // Formats values as currency
+                    />
                     <YAxis 
                       dataKey="station_name" 
                       type="category" 

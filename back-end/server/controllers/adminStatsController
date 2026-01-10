@@ -17,6 +17,7 @@ class chartData {
                 AdminStatsModel.PowerEfficiency()   
             ]);
 
+
             res.status(200).json({
                 status:"OK",
                 data: {
