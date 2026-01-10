@@ -60,6 +60,9 @@ const Profile = () => {
 	    <p className="subtitle">Profile</p>
 	  </div>
 	  <div className="header-right">
+	    {profile.role === 'admin' && (
+		<button className="btn-map" onClick={() => navigate("/stats")}>Business Analytics</button>
+	    )}
 	    <button className="btn-map" onClick={() => navigate("/map")}>Map</button>
 	    <button className="btn-logout" onClick={handleLogout}>Logout</button>
 	  </div>
@@ -83,8 +86,7 @@ const Profile = () => {
 	<div className="tab-content">
 	  {activeTab === "Overview" && <ProfileOverview profile={profile} />}
 	  {activeTab === "Stats" && <ProfileStats />}
-	  {/* FIXME - not yet implemented */}
-	  {activeTab === "Settings" && <ProfileSettings />}
+	  {activeTab === "Settings" && <ProfileSettings profile={profile} />}
 	</div>
 
      </div>

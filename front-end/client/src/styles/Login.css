@@ -9,7 +9,7 @@ body, html {
   box-sizing: border-box;
 }
 
-/* 2. Main Container - Map Palette Background */
+/* 2. Main Container - Vibrant Theme Background */
 .login-container {
   display: flex;
   justify-content: center; 
@@ -17,8 +17,8 @@ body, html {
   width: 100vw;            
   height: 100vh;           
   
-  /* UPDATED: Gradient matching the map (Sage Green to Light Beige) */
-  background: linear-gradient(135deg, #c0bea0 0%, #F5F5DC 100%);
+  /* UPDATED: Subtle Yellow Gradient */
+  background:  #c6def1;
   background-size: cover;  
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -26,7 +26,7 @@ body, html {
 /* 3. The Glass Card */
 .glass-card {
   /* UPDATED: Slightly more opaque white for light background */
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Softer shadow */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -38,14 +38,14 @@ body, html {
   max-width: 420px; 
   
   text-align: center;
-  color: #333333; /* UPDATED: Dark text for readability */
+  color: var(--text-main); /* UPDATED: Dark text for readability */
 }
 
 .glass-card h2 {
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: 600;
-  color: #2c3e50; /* Dark slate */
+  color: var(--text-main);
 }
 
 .input-group {
@@ -66,7 +66,7 @@ body, html {
   padding: 12px; 
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.1); /* Darker border */
-  background: rgba(255, 255, 255, 0.8); /* Brighter input background */
+  background: rgba(255, 255, 255, 0.9); /* Brighter input background */
   color: #333;
   font-size: 1rem;
   outline: none;
@@ -76,8 +76,8 @@ body, html {
 
 .input-group input:focus {
   background: #ffffff;
-  border-color: #F3D55B; /* Map Yellow border on focus */
-  box-shadow: 0 0 0 3px rgba(243, 213, 91, 0.3); /* Yellow glow */
+  border-color: var(--primary-color); /* Map Yellow border on focus */
+  box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.3); /* Yellow glow */
 }
 
 /* Placeholder color */
@@ -98,8 +98,10 @@ body, html {
   right: 10px;        
   top: 50%;           
   transform: translateY(-50%); 
-  background: none;
-  border: none;
+  background: transparent !important; /* Force override global button */
+  border: none !important;            /* Force override global button */
+  box-shadow: none !important;
+  
   cursor: pointer;
   color: #666; /* Darker icon color */
   padding: 0;
@@ -108,6 +110,8 @@ body, html {
   transition: color 0.2s;
 }
 .toggle-password-btn:hover {
+  background: transparent !important; /* Prevent white box on hover */
+  border: none !important;            /* Prevent border on hover */
   color: #333;
 }
 
@@ -117,11 +121,11 @@ body, html {
   padding: 14px;
   margin-top: 1rem;
   border-radius: 8px;
-  border: none;
   
-  /* UPDATED: Map Yellow */
-  background: #F3D55B; 
-  color: #333333; /* Dark text on yellow */
+  /* Rule: Yellow Bg, Black Text, NO Border default */
+  background: var(--primary-color); 
+  color: #000000;
+  border: 1px solid transparent;
   
   font-weight: bold;
   font-size: 1.1rem;
@@ -132,7 +136,11 @@ body, html {
 .login-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  background: #ecd055; /* Slightly darker yellow */
+  
+  /* Rule: Hover -> White Bg, Black Text, Black Border */
+  background: #FFFFFF;
+  color: #000000;
+  border-color: #000000;
 }
 
 /* --- Back Button --- */
@@ -144,10 +152,10 @@ body, html {
   align-items: center;
   gap: 8px; 
   
-  /* UPDATED: White background for contrast against map */
-  background: #F3D55B;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #333; /* Dark Text */
+  /* Rule: Yellow Bg, Black Text, NO border default */
+  background: var(--primary-color);
+  border: 1px solid transparent;
+  color: #000000;
   
   padding: 10px 20px;
   border-radius: 8px;
@@ -159,9 +167,10 @@ body, html {
 }
 
 .back-btn:hover {
-  background: #ffffff;
-  color: #F3D55B;
-  border-color: #F3D55B;
+  /* Rule: Hover -> White Bg, Black Text, Black Border */
+  background: #FFFFFF;
+  color: #000000;
+  border-color: #000000;
   transform: translateX(-3px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
@@ -180,7 +189,7 @@ body, html {
 .signup-link {
   background: none;
   border: none;
-  color: #2c3e50;
+  color: var(--text-main);
   font-weight: 700; 
   cursor: pointer;
   text-decoration: underline;
@@ -191,5 +200,5 @@ body, html {
 }
 
 .signup-link:hover {
-  color: #F3D55B; /* Yellow hover */
+  color: #3A8CCF; /* Yellow hover */
 }

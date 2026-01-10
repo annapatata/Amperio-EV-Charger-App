@@ -67,7 +67,7 @@
 
 .search-bar {
     width: 100%;
-    background: rgb(240, 232, 150);
+    background: var(--primary-color);
     padding: 10px 20px;
     border-radius: 30px;
     
@@ -89,7 +89,7 @@
     /* Font & Size Fixes */
     font-family: 'Inter', sans-serif; /* Or your preferred font */
     font-size: 16px;                 /* Standard readable size */
-    color: #333;                     /* Dark grey text for better contrast on yellow */
+    color: var(--text-on-primary);   /* Dark grey text for better contrast on yellow */
     
     width: 100%;                     /* Makes sure the text area fills the bar */
     margin-left: 10px;               /* Space between your icon and text */
@@ -116,14 +116,12 @@
 
 .user-btn {
     /* Existing rectangular styles */
-    background: transparent;
-    border: 1px solid #ddd;
+    border: 1px solid transparent;
     padding: 10px 30px;
     border-radius: 10px; /* Rectangular look */
     
     font-size: 16px;
     font-weight: 500;
-    color: #555;
     text-decoration: none; /* Removes the blue underline from Links */
     
     display: inline-flex;  /* Centers text inside the link-button */
@@ -136,25 +134,33 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
+/* Base Hover for generic user-btn (if any) */
 .user-btn:hover {
-    background-color: transparent;
-    border-color: rgb(240, 232, 150); /* Highlight with your brand pink */
-    color: rgb(240, 227, 89);
+    color: #000000;
+    border-color: #000000;
+  transform: translateY(-2px);
 }
 
+/* First Button (Login): Default White, Hover Yellow */
 .auth-buttons .user-btn:first-child{
-    background: white;
+    background: #FFFFFF;
+    color: #000000;
+}
+.auth-buttons .user-btn:first-child:hover{
+    background: var(--primary-color); /* Yellow */
+    color: #000000;
 }
 
-/* Add this to make Sign Up stand out */
+/* Last Button (Sign Up): Default Yellow, Hover White */
 .auth-buttons .user-btn:last-child {
-    background: rgb(240, 232, 150);
-    color: white;
-    border-color: rgb(240, 232, 150);
+    background: var(--primary-color);
+    color: #000000;
+    /* border-color: #000000; */
 }
 
 .auth-buttons .user-btn:last-child:hover{
-    color: rgb(131, 121, 8);
+    background: #FFFFFF;
+    color: #000000;
 }
 /* The Container: Controls the layout and spacing of the pills */
 .filter-pill-container {
@@ -174,8 +180,9 @@
 .filter-pill {
     
     
-    background: white;
-    border: 1px solid #ddd;
+    background: #FFFFFF;
+    border: 1px solid transparent; /* Border only on hover */
+    color: #000000;
     
     /* Padding: First number is Top/Bottom, Second is Left/Right */
     padding: 6px 14px;     
@@ -183,7 +190,6 @@
     border-radius: 20px;   /* Makes them rounded */
     font-size: 13px;       /* Keeps the text "small" but readable */
     font-weight: 500;
-    color: #555;
     
     white-space: nowrap;   /* Prevents text from wrapping to a second line */
     cursor: pointer;
@@ -200,14 +206,15 @@
 
 /* Hover & Active States */
 .filter-pill:hover {
-    border-color: rgb(240, 232, 150); /* Your brand pink */
-    color: rgb(240, 232, 150);
+    background: var(--primary-color);
+    border-color: #000000; 
+    color: #000000;
 }
 
 .filter-pill.active {
-    background: rgb(240, 232, 150);
-    color: white;
-    border-color: rgb(240, 232, 150);
+    background: var(--primary-color);
+    color: #000000;
+    border-color: #000000;
 }
 
 .dropdown-wrapper {
@@ -240,7 +247,7 @@
 }
 
 .dropdown-menu button:hover{
-    background-color:rgb(240, 232, 150) ;
+    background-color: var(--primary-color);
 }
 
 

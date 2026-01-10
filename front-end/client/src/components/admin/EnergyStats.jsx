@@ -67,7 +67,7 @@ const EnergyTab = ({ data }) => {
                     />
                     <Scatter data={heatmapData}>
                       {heatmapData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.total_energy > 100 ? '#b59f0b' : '#F3D55B'} />
+                        <Cell key={`cell-${index}`} fill={entry.total_energy > 100 ? '#F57F17' : '#FFD600'} />
                       ))}
                     </Scatter>
                   </ScatterChart>

@@ -61,48 +61,50 @@ export default function StationDetails({ station, onClose }) {
 
       {/* The Sliding Block */}
       <div className="station-drawer">
+        <div className="station-ribbon"></div>
+        <div className="station-content">
+          <div className="drawer-header">
+            <h2>{station.station_name || station.address}</h2>
+            {station.name && (
+              <p className="station-address" style={{ margin: 0, color: '#f6cc41ff' }}>{station.address}</p>
+            )}
+            {station.address && (
+            <p className="station-subtitle" style={{ margin: "4px 0 0 0", color: "#666", fontSize: "0.95rem" }}>
+            {station.address}
+            </p>
+            )}
+            <button className="close-btn" onClick={onClose}>×</button>
+          </div>
+            
+          <Score value={station.score || 0} />
+          <p className="facilities"> <strong>Nearby:</strong> {station.facilities || "N/A"}</p>
 
-        <div className="drawer-header">
-          <h2>{station.station_name || station.address}</h2>
-          {station.name && (
-            <p className="station-address" style={{ margin: 0, color: '#f6cc41ff' }}>{station.address}</p>
-          )}
-          {station.address && (
-           <p className="station-subtitle" style={{ margin: "4px 0 0 0", color: "#666", fontSize: "0.95rem" }}>
-          {station.address}
-          </p>
-           )}
-       <button className="close-btn" onClick={onClose}>×</button>
-        </div>
-          
-        <Score value={station.score || 0} />
-        <p className="facilities"> <strong>Nearby:</strong> {station.facilities || "N/A"}</p>
+          <div className="charger-list">
+            { station.chargers && station.chargers.length >0 ? (
+            station.chargers.map((charger) => (
+              <div key={charger.charger_id} className="charger-card">
+                <div className="charger-info-main"> 
+                  <div className="connector-icon-wrapper">
+                    <ConnectorIcon type={charger.connector_type} />
+                  </div>
+                  <div className="text-container"> 
+                    <span className="connector-name">{charger.connector_type}</span>
+                  <span className = "power-level">{charger.power} kW</span>
+                  <span className={`status-pill ${charger.charger_status}`}>
+                    {charger.charger_status} </span>
+                  </div>
+                </div>
 
-        <div className="charger-list">
-          { station.chargers && station.chargers.length >0 ? (
-          station.chargers.map((charger) => (
-            <div key={charger.charger_id} className="charger-card">
-              <div className="charger-info-main"> 
-                <div className="connector-icon-wrapper">
-                  <ConnectorIcon type={charger.connector_type} />
-                </div>
-                <div className="text-container"> 
-                  <span className="connector-name">{charger.connector_type}</span>
-                <span className = "power-level">{charger.power} kW</span>
-                <span className={`status-pill ${charger.charger_status}`}>
-                  {charger.charger_status} </span>
-                </div>
+                {/* Corrected logic to use charger_status to match your status above */}
+                {charger.charger_status === 'available' && (
+                  <button className="reserve-btn">Reserve Now</button>
+                )}
               </div>
-
-              {/* Corrected logic to use charger_status to match your status above */}
-              {charger.charger_status === 'available' && (
-                <button className="reserve-btn">Reserve Now</button>
-              )}
-            </div>
-          ))
-        ):(
-          <p className="no-chargers">No chargers available at this location.</p>
-        )}
+            ))
+          ):(
+            <p className="no-chargers">No chargers available at this location.</p>
+          )}
+          </div>
         </div>
       </div>
     </>

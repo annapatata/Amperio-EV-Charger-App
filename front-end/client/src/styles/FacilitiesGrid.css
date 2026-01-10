@@ -30,14 +30,14 @@
 
 .facility-checkbox-item:hover {
     background: #f0f0f0;
-    border-color: rgb(240, 232, 150);
+    border-color: var(--primary-color);
 }
 
 .facility-checkbox-item input[type="checkbox"] {
     cursor: pointer;
     width: 16px;
     height: 16px;
-    accent-color: rgb(240, 232, 150);
+    accent-color: var(--primary-color);
 }
 
 .facility-checkbox-item span {

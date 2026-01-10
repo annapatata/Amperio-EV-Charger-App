@@ -18,7 +18,13 @@ const PlaceholderTab = ({ name }) => (
 const AdminStats = () => {
   
   const navigate = useNavigate();
+  const { logoutAction } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('financial');
+
+  const handleLogout = () => {
+    logoutAction();
+    navigate("/map");
+  };
   const [data, setData] = useState({ monthlyFinance: [], stationRevenue: [], energyHeatmap: [], powerEfficiency: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -56,10 +62,13 @@ if (loading) return <div className="profile-container"><div className="loading-s
           <p className="subtitle">Overview of network performance and revenue</p>
         </div>
         <div className="header-right">
-          <button className="btn-map" onClick={() => navigate('/map')}>
-            Back to Map
+          <button className="btn-map" onClick={() => navigate('/profile')}>
+            Profile
           </button>
-          <button className="btn-logout" onClick={() => { /* add logout logic */ }}>
+          <button className="btn-map" onClick={() => navigate('/map')}>
+            Map
+          </button>
+          <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>
         </div>

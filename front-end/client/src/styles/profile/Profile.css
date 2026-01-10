@@ -8,8 +8,8 @@
   overflow-y: auto;
   z-index: 100;
 
-  /* UPDATED: Gradient matching the map/login (Sage Green to Light Beige) */
-  background: linear-gradient(135deg, #c0bea0 0%, #F5F5DC 100%);
+  /* UPDATED: Subtle Yellow Gradient */
+  background: #c6def1; /* linear-gradient(135deg, #11266d 0%, #0b199e 50%, #060dcf 100%); */
   background-size: cover;
 
   padding: 2rem 4rem;
@@ -58,26 +58,30 @@ button {
 
 /* Updated Map Button to match Theme Yellow */
 .btn-map {
-  background-color: #F3D55B;
-  color: #333;
-  border: 1px solid rgba(0,0,0,0.05);
+  background-color: var(--primary-color);
+  color: #000000;
+  border: 1px solid transparent;
 }
 
 .btn-map:hover {
-  background-color: #ecd055;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-color: #000000;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-logout {
-  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent */
-  border: 1px solid #e74c3c;
-  color: #e74c3c;
+  background-color: #FFFFFF;
+  border: 1px solid transparent;
+  color: #FF0000;
 }
 
 .btn-logout:hover {
-  background-color: #e74c3c;
-  color: white;
+  background-color: #ff0000;;
+  color: #ffffff;
+  transform: translateY(-2px);
+  border-color: #ffffff;
 }
 
 /* --- Tab Navigation --- */
@@ -89,7 +93,9 @@ button {
 }
 
 .btn-tab {
-  background: none;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
   color: #666;
   padding: 0.8rem 0;
   border-radius: 0;
@@ -98,12 +104,13 @@ button {
 }
 
 .btn-tab:hover {
+  background: none !important;
   color: #333;
 }
 
 /* Active Tab Indicator - Updated to Theme Yellow/Gold */
 .btn-tab.active {
-  color: #b59f0b; /* Darker yellow/gold for text readability */
+  color: var(--primary-hover); /* Darker yellow/gold for text readability */
 }
 
 .btn-tab.active::after {
@@ -113,7 +120,7 @@ button {
   left: 0;
   width: 100%;
   height: 3px; /* Slightly thicker */
-  background-color: #F3D55B; /* Theme Yellow */
+  background-color: var(--primary-color); /* Theme Yellow */
 }
 
 /* --- Content Area --- */

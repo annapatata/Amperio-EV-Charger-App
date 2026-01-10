@@ -65,8 +65,8 @@ const FinancialTab = ({ data }) => {
                     />
                     <Legend verticalAlign="top" align="right" iconType="circle" />
                     {/* Sage Green for Revenue, Gold for Cost */}
-                    <Bar dataKey="revenue" fill="#c0bea0" name="Revenue (€)" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="cost" fill="#F3D55B" name="Wholesale Cost (€)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="revenue" fill="#333333" name="Revenue (€)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="cost" fill="#FFD600" name="Wholesale Cost (€)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -97,7 +97,7 @@ const FinancialTab = ({ data }) => {
                     />
                     <Tooltip cursor={{fill: 'rgba(0,0,0,0.05)'}} />
                     {/* Sage Green for Station Bars */}
-                    <Bar dataKey="total_revenue" fill="#c0bea0" name="Gross Revenue (€)" radius={[0, 4, 4, 0]} barSize={30} />
+                    <Bar dataKey="total_revenue" fill="#333333" name="Gross Revenue (€)" radius={[0, 4, 4, 0]} barSize={30} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (

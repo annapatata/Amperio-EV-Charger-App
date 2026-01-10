@@ -14,7 +14,7 @@ const Login = () => {
   const location = useLocation();
 
   // if we come from a page go there, else go to profile
-  const from = location.state?.from?.pathname || "/profile";
+  const from = "/profile";
 	
   const handleSubmit = async (e) => {
     e.preventDefault();
