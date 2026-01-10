@@ -12,12 +12,19 @@
 /* Individual islands need to "turn back on" pointer events so you can click buttons */
 .branding-island, 
 .search-filter-container, 
-
 .user-island {
     position: absolute;
-    pointer-events: auto; 
-    background: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    pointer-events: none; 
+}
+
+/* Re-enable interaction on specific elements */
+.mascot-img,
+.search-bar,
+.filter-pill,
+.user-btn,
+.dropdown-menu,
+.suggestions-list {
+    pointer-events: auto;
 }
 
 /* 1. TOP LEFT: Branding */
@@ -56,7 +63,6 @@
     width: 100%;
     max-width: 600px;
     background: transparent; /* Transparent so map shows between search and pills */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -11,8 +11,8 @@ export default function MapView({stations, onStationClick}) {
     // DEBUG
     >
       <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+	attribution='&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	url='https://{s}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}{r}.png?apikey=fb7a93ebc29a49cf9a8d94e56c00af61'
       />
 
       {stations && stations.map((station) => {
