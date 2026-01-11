@@ -11,7 +11,7 @@ class UserStatsModel {
 
 	static async getChartData(id) {
 		const sql = `
-			SELECT s.session_id, s.start_time, s.energy_delivered, s.price_per_kwh, st.station_id, st.address
+			SELECT s.session_id, s.start_time, s.energy_delivered, s.price_per_kwh, st.station_id, st.station_name
 			FROM Session s
 			JOIN Charger c ON s.charger_id = c.charger_id
 			JOIN Station st ON c.station_id = st.station_id

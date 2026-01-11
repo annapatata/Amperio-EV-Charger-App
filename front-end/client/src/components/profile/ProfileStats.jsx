@@ -65,7 +65,7 @@ const ProfileStats = () => {
       else timeOfDayMap.Night++;
 
       // Pie Chart data
-      const stationName = session.address; {/*? session.Station.address : `Station ${session.station_id}`;*/}
+      const stationName = session.station_name; {/*? session.Station.address : `Station ${session.station_id}`;*/}
       stationMap[stationName] = (stationMap[stationName] || 0) + 1;
     });
 

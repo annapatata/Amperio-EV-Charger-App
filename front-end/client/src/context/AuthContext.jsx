@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 		  }
 
 		  try {
-			  const res = await api.get("/users/userdata");
+			  const res = await api.get("/users/profile");
 			  setUser(res.data);
 		  } catch (err) {
 			  console.error("Invalid or Expired Token");
