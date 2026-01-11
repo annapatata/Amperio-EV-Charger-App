@@ -29,7 +29,6 @@ const Signup = () => {
       loginAction(user, token);
       
       // 4. Redirect to Dashboard
-      alert("Sign-up Successful!");
       navigate("/profile");
 
     } catch (err) {

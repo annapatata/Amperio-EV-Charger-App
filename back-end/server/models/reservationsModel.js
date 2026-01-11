@@ -4,7 +4,7 @@ class ReservationsModel {
 
 	static async upcoming(id) {
 		const sql = `
-		Select s.address, r.reservation_end_time 
+		Select s.station_name, s.address, r.reservation_end_time 
 		from Reservation r 
 		join Charger c on r.charger_id = c.charger_id 
 		join Station s on c.station_id = s.station_id 

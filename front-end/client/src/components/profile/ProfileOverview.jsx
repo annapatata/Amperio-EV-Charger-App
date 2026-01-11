@@ -65,8 +65,8 @@ const ProfileOverview = ({ profile}) => {
 				<h3>Upcoming Reservation</h3>
 				{upcoming ? (
 					<>
-					<p className="rsv-info">Station: {upcoming.address}</p>
-					<p className="rsv-info">Ends at: {new Date(upcoming.reservation_end_time).toLocaleString()}</p>
+					<p className="rsv-info">Station: {upcoming.station_name} ({upcoming.address})</p>
+					<p className="rsv-info">Ends at: {new Date(upcoming.reservation_end_time).toLocaleDateString('en-GB')} {new Date(upcoming.reservation_end_time).toLocaleTimeString('en-GB', { hour: '2-digit', minute : '2-digit' })}</p> 
 				</> 
 				) : (
 				<p className="rsv-info">No Upcoming Reservation</p> 

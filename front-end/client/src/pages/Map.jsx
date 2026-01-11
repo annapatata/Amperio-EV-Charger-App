@@ -1,4 +1,4 @@
-import {useState, useEffect } from "react"; 
+import {useState, useEffect, useContext } from "react"; 
 import { AuthContext } from "../context/AuthContext"; 
 import FloatingSearch from "../components/layout/FloatingSearch"; 
 import BrandingIsland from "../components/layout/BrandingIsland";
@@ -11,6 +11,7 @@ import '../styles/MapOverlay.css';
 export default function Map() {
   const [selectedStation, setSelectedStation] = useState(null);
   const [stations, setStations] = useState([]); /*this stores the filtered station list*/
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -73,6 +74,7 @@ const handleSearch = async (updatedFilters) => {
   const data = await response.json();
   setStations(data); /* we update the stations, which are handled by mapview.jsx*/
 };
+
 
   const handleMarkerClick = async (station) => {
     try {
