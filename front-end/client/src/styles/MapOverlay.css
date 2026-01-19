@@ -170,6 +170,7 @@
 }
 /* The Container: Controls the layout and spacing of the pills */
 .filter-pill-container {
+    flex-shrink: 0;
     display: flex;         /* Lays pills out in a row */
     gap: 10px;            /* The "adequate space" between pills */
     padding: 5px 0;       /* Optional: space above/below the row */
@@ -306,3 +307,41 @@
 .dropdown-menu button.selected:hover {
     filter: brightness(0.9);
 }
+
+.clear-filters-btn {
+    position: relative; /* Ensures z-index is respected */
+    z-index: 10;        /* Higher than the container background */
+    cursor: pointer !important;
+    pointer-events: auto !important; /* Forces clickability */
+    
+    /* Visual styles */
+    background: #fff;
+    border: 1px solid #ff4d4f;
+    color: #ff4d4f;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.clear-filters-btn:hover {
+    background: #fff1f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* The clear link inside the dropdown menu 
+.dropdown-clear-link {
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #007bff !important;
+    border-bottom: 1px solid #eee !important;
+    padding: 8px 10px !important;
+    text-align: center !important;
+    font-weight: bold;
+}
+
+.dropdown-clear-link:hover {
+    background: #f8f9fa !important;
+    text-decoration: underline;
+}*/
