@@ -293,3 +293,16 @@
 .suggestions-list li b {
   color: #007bff; /* Highlights the bold parts in blue */
 }
+
+
+.dropdown-menu button.selected {
+    background-color: #ddc41eff; 
+    color: #000;
+    font-weight: bold;
+    border-left: 4px solid #000; 
+}
+
+
+.dropdown-menu button.selected:hover {
+    filter: brightness(0.9);
+}
