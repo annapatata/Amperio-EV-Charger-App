@@ -45,7 +45,7 @@ CREATE TABLE Charger (
 CREATE TABLE EnergyPricingHistory (
 	history_id INT AUTO_INCREMENT PRIMARY KEY,
 	time_ref TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	current_price DECIMAL(5,3) 
+	current_price DECIMAL(5,2) 
 );
 
 ------------------------------------------------------

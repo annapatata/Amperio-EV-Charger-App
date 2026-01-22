@@ -3,6 +3,8 @@ const { formatTimestamp } = require('../utils/dateUtils');
 const { parseUrlDate } = require('../utils/dateUtils');
 const { XMLParser } = require('fast-xml-parser');
 
+
+
 // Define the valid statuses based on your requirements
 const VALID_STATUSES = ['available', 'charging', 'reserved', 'offline', 'malfunction'];
 
@@ -68,7 +70,6 @@ const getPointDetails = async (req, res, next) => {
         next(error);
     }
 };
-
 
 // Healthcheck
 const healthcheck = async (req, res, next) => {
@@ -180,6 +181,8 @@ const updatePoint = async (req, res, next) => {
     }
 };
 
+
+//in the process of moving this to the daemon
 const getPrices = async (req, res, next) => {
     try {
 
@@ -190,19 +193,22 @@ const getPrices = async (req, res, next) => {
         if (month < 10) month = `0${month}`;
         let day = now.getDate();
         if (day < 10) day = `0${day}`;
-        const currentDateTime = `${year}${month}${day}0000`;
+
+        const periodStart = `${year}${month}${day}2000`;
+        const periodEnd   = `${year}${month}${day}2300`;
 
         //set up url parameters
         const url = "https://web-api.tp.entsoe.eu/api"
         const ENTSOE_TOKEN = process.env.ENTSOE_TOKEN;
         const documentType = "A44";
         const Domain = "10YGR-HTSO-----Y";
-        const urlWithParams = `${url}?documentType=${documentType}&in_Domain=${Domain}&out_Domain=${Domain}&periodStart=${currentDateTime}&periodEnd=${currentDateTime}&securityToken=${ENTSOE_TOKEN}`;
+        const urlWithParams = `${url}?documentType=${documentType}&in_Domain=${Domain}&out_Domain=${Domain}&periodStart=${periodStart}&periodEnd=${periodEnd}&securityToken=${ENTSOE_TOKEN}`;
 
         //fetch data from ENTSOE
         const response = await fetch(urlWithParams);
         const xmlText = await response.text();
 
+        console.log(response);
         // parse XML and return ordered prices array
         const prices = new XMLParser().parse(xmlText).Publication_MarketDocument.TimeSeries.Period.Point.map(p => Number(p['price.amount']));
         return res.status(200).json({ prices });
@@ -212,7 +218,6 @@ const getPrices = async (req, res, next) => {
         next(err);
     }
 };
-
 
 const getTimePointStatus= async (req, res,next) => {
     try {
