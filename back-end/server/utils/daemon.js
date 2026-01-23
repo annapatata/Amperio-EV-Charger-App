@@ -90,7 +90,6 @@ const savePriceList = async (prices) => {
             if (hour == 0) day++;
             
             const timeRef = new Date(now.getFullYear(), now.getMonth(), day,  hour, 15*(i%4), 0); // Greece local time (UTC+2)
-            console.log(timeRef);
             await db.query(sql, [toSqlDateTime(timeRef), prices[i]]);
             console.log(`Saved price for ${toSqlDateTime(timeRef)}: ${prices[i]} €/MWh`);
         }
@@ -106,6 +105,10 @@ const fetchCurrentPrice = async () => {
         const sql = 'SELECT current_price FROM EnergyPricingHistory WHERE time_ref <= NOW() ORDER BY time_ref DESC LIMIT 1;';
         const [rows] = await db.query(sql);
 
+        if(rows.length === 0){
+            console.log("No price data found in database.");
+            return null;
+        }
         console.log("Fetched current price:", rows[0].current_price);
         return rows[0].current_price;
     } catch (error) {
@@ -119,12 +122,13 @@ const updateChargerPointPrices = async () => {
 
     //Get current price converted to KWh
     const current_price = Number((await fetchCurrentPrice() / 1000).toFixed(3));
+    if (current_price != null) {
+        let chargers = await Charger.getAllChargers();
 
-    let chargers = await Charger.getAllChargers();
-
-    chargers.forEach(async c => {
-       await Charger.setKwhPrice(c.pointid, current_price);
-    });
+        chargers.forEach(async c => {
+        await Charger.setKwhPrice(c.pointid, current_price);
+        });
+    }
 };
 
 //Lil helper function
