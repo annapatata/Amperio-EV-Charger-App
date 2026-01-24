@@ -6,6 +6,8 @@ const searchStations = async (req, res, next) => {
     try {
         const { q, power, connector, available, facilities,score } = req.query;
 
+        console.log('Search params:', req.query);
+
         // Using LEFT JOIN ensures stations show up even if chargers aren't fully mapped
         let queryText = `
             SELECT s.station_id, 
@@ -25,6 +27,7 @@ const searchStations = async (req, res, next) => {
             WHERE 1=1
         `;
         let queryParams = [];
+        let havingClauses = [];
 
         // 1. Text Search (MySQL LIKE is case-insensitive by default with most collations)
         if (q) {
@@ -39,9 +42,9 @@ const searchStations = async (req, res, next) => {
             const powerArray = power.split(',').map(p=>Number(p.trim())).filter(p=>!isNaN(p));
             // For multiple power levels, we can use IN clause
             if (powerArray.length > 0) {
-                //creates "AND ch.power IN (?,?,?)" depending on how many power levels are selected
+                //creates "AND EXISTS ..." 
                 const placeholders = powerArray.map(()=>'?').join(', ');
-                queryText += ` AND ch.power IN (${placeholders})`;
+                queryText += ` AND EXISTS (SELECT 1 FROM Charger ch_filter WHERE ch_filter.station_id = s.station_id AND ch_filter.power IN (${placeholders}))`;
                 queryParams.push(...powerArray);
             }
         }
@@ -52,15 +55,11 @@ const searchStations = async (req, res, next) => {
             // For multiple connectors, we can use IN clause
             if (connectorArray.length > 0) {
                 const placeholders = connectorArray.map(() => '?').join(', ');
-                queryText += ` AND ch.connector_type IN (${placeholders})`;
+                queryText += ` AND EXISTS (SELECT 1 FROM Charger ch_filter WHERE ch_filter.station_id = s.station_id AND ch_filter.connector_type IN (${placeholders}))`;
                 queryParams.push(...connectorArray);
             }
         }
 
-        // 4. Availability Filter
-        if (available === 'true') {
-            queryText += ` AND ch.charger_status = 'available'`;
-        }
 
         // 5. Facilities Filter - handle comma-separated string
         if (facilities && facilities !== "" && facilities !== 'undefined') {
@@ -99,9 +98,23 @@ if (req.query.score && req.query.score !== "" && req.query.score !== 'undefined'
         // 2. Add the GROUP BY so the aggregate functions (SUM) work
         queryText += ` GROUP BY s.station_id`;
 
+        // 7. Availability Filter (applied as HAVING)
+        if (available === 'true') {
+            havingClauses.push(`SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0`);
+        }
+
+        if (havingClauses.length > 0) {
+            queryText += ` HAVING ${havingClauses.join(' AND ')}`;
+        }
+
+        console.log('Final queryText:', queryText);
+        console.log('queryParams:', queryParams);
+
         // For MySQL, 'db.query' usually returns [rows, fields]
         const [rows] = await db.query(queryText, queryParams);
         
+        console.log('Result rows length:', rows.length);
+
         // Send the rows directly
         res.status(200).json(rows);
 

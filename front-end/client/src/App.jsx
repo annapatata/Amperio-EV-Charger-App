@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Map from "./pages/Map";
 import Unauthorized from "./pages/Unauthorized";
+import OnBoarding from "./pages/OnBoarding";
 import AdminStats from "./pages/AdminStats";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
 					<Route element={<PrivateRoute />}>
 
 						<Route path="/profile" element={<Profile />} />
+						<Route path="/onboarding" element={<OnBoarding />} />
 					</Route>
 
 					{/* Admin */}

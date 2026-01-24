@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import api from "../axiosConfig";
 import { AuthContext } from "../context/AuthContext";
 import FloatingSearch from "../components/layout/FloatingSearch";
@@ -37,15 +37,32 @@ export default function Map() {
     score: []
   });
 
+  const hasSynced = useRef(false); // Prevents overwriting manual changes later
+
   const handleSearch = async (updatedFilters) => {
     const newFilters = { ...filters, ...updatedFilters }; /*merges old filters with new ones so we can check multiple at once*/
 
-    // Convert facilities array to comma-separated string for URL
+    // Convert array filters to comma-separated strings for URL
     const filterForURL = { ...newFilters };
     if (Array.isArray(filterForURL.facilities) && filterForURL.facilities.length > 0) {
       filterForURL.facilities = filterForURL.facilities.join(',');
     } else {
       filterForURL.facilities = '';
+    }
+    if (Array.isArray(filterForURL.power) && filterForURL.power.length > 0) {
+      filterForURL.power = filterForURL.power.join(',');
+    } else {
+      filterForURL.power = '';
+    }
+    if (Array.isArray(filterForURL.connector) && filterForURL.connector.length > 0) {
+      filterForURL.connector = filterForURL.connector.join(',');
+    } else {
+      filterForURL.connector = '';
+    }
+    if (Array.isArray(filterForURL.score) && filterForURL.score.length > 0) {
+      filterForURL.score = filterForURL.score.join(',');
+    } else {
+      filterForURL.score = '';
     }
 
     // Clean the filters: convert undefined or null to empty string
@@ -62,6 +79,17 @@ export default function Map() {
       console.error("Server Error:", error.response ? error.response.status : error.message);
     }
   };
+
+  useEffect(() => {
+    // Only sync if we haven't synced yet and user has at least one default
+    if (!hasSynced.current && (user?.default_charger_power || user?.default_connector_type)) {
+      const updates = {};
+      if (user.default_charger_power) updates.power = [Number(user.default_charger_power)];
+      if (user.default_connector_type) updates.connector = [user.default_connector_type];
+      handleSearch(updates);
+      hasSynced.current = true; // Mark as done so it doesn't loop
+    }
+  }, [user, handleSearch]);
 
 
   const handleMarkerClick = async (station) => {

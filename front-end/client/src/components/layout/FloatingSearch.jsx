@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef , useContext} from "react";
+import { AuthContext } from "../../context/AuthContext";
+
 import api from "../../axiosConfig";
 import "../../styles/FacilitiesGrid.css";
 
@@ -7,6 +9,7 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
   const [openDropdown, setOpenDropdown] = useState(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const { user } = useContext(AuthContext);
   const wrapperRef = useRef(null);
 
   useEffect(() => {

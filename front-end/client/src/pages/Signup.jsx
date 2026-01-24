@@ -28,8 +28,8 @@ const Signup = () => {
       // 3. Save them in the Global Brain
       loginAction(user, token);
       
-      // 4. Redirect to Dashboard
-      navigate("/profile");
+      // 4. Redirect to Onboarding
+      navigate("/onboarding");
 
     } catch (err) {
       alert(err.response?.data?.message || "Error registering");
