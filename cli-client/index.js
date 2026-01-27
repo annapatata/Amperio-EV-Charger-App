@@ -212,8 +212,8 @@ program
 	.command("sessions")
 	.description("get list of sessions for a charger")
 	.requiredOption("--id <id>", "id of requested point")
-	.requiredOption("--from <from>", "id of requested point")
-	.requiredOption("--to <to>", "id of requested point")
+	.requiredOption("--from <from>", "start time of query")
+	.requiredOption("--to <to>", "end time of query")
 	.option("--format <format>", "json or csv format for data", "csv")
 	.action(async (opts) =>
 		{
@@ -235,5 +235,34 @@ program
 				console.error("Error fetching sessions:", err.message);
 			}
 		});
+
+program
+        .command("pointstatus")
+        .description("get list of status transitions for a charger")
+        .requiredOption("--id <id>", "id of requested point")
+        .requiredOption("--from <from>", "start time of query")
+        .requiredOption("--to <to>", "end time of query")
+        .option("--format <format>", "json or csv format for data", "csv")
+        .action(async (opts) =>
+                {
+                        try
+                        {
+                                const res = await axios.get(`${API_BASE}/pointstatus/${opts.id}/${opts.from}/${opts.to}`);
+
+                                res.data.sort((a, b) => b.starttime - a.starttime);
+
+                                if (opts.format === "json") {
+                                        console.log(JSON.stringify(res.data, null, 2));
+                                } else if (opts.format === "csv") {
+                                        const csv = stringify(res.data, { header: true });
+                                        console.log(csv);
+                                }
+                        }
+                        catch (err)
+                        {
+                                console.error("Error fetching point status:", err.message);
+                        }
+                });
+
 
 program.parse(process.argv);
