@@ -3,7 +3,10 @@ const cors = require('cors');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const cron = require('node-cron');
+const daemon = require('./utils/daemon.js');
 require('dotenv').config();
+
 
 // import error-handling middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -76,3 +79,19 @@ if (USE_HTTPS) {
     console.log(`🌍 HTTP server running at http://localhost:${PORT}`);
   });
 }
+
+//Schedule the price fetching at 1:00 every day
+cron.schedule('0 1 * * *', async () => {
+    let prices = await daemon.getPrices();
+    while (!prices) {
+        console.log("Failed to fetch prices from ENTSOE.");
+        cron.schedule('0 * * * *', async () => {
+            prices = await daemon.getPrices();
+        });
+    }
+    await daemon.savePriceList(prices);
+});
+
+cron.schedule('*/15 * * * *', async () => {
+    await daemon.updateChargerPointPrices();
+});
