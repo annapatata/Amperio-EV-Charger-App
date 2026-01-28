@@ -4,6 +4,11 @@ import "../styles/About.css";
 export default function About() {
   return (
     <div className="about-container">
+
+      <Link to="/map" className="back-btn">
+        <span>Back to Map</span>
+      </Link>
+
       <div className="about-card">
         <h1 className="about-title">About Amperio</h1>
         <p className="about-intro">
@@ -19,7 +24,7 @@ export default function About() {
 
         <div className="about-content-section">
           <h2>Technology Stack</h2>
-          <div className="tech-two-column">
+          <div className="tech-three-column">
             <div>
               <h3>Frontend</h3>
               <ul>
@@ -37,6 +42,13 @@ export default function About() {
                 <li>MySQL Database</li>
                 <li>JWT Auth</li>
                 <li>RESTful API</li>
+              </ul>
+            </div>
+            <div>
+              <h3>CLI</h3>
+              <ul>
+                <li>Node.js</li>
+                <li>Commander.js</li>
               </ul>
             </div>
           </div>
@@ -59,9 +71,6 @@ export default function About() {
           </p>
         </div>
 
-        <Link to="/map" className="back-btn">
-          Back to Map
-        </Link>
       </div>
     </div>
   );
