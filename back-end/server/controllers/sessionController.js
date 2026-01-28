@@ -120,6 +120,16 @@ const getSessions = async (req, res, next) =>
 			res.status(400);
 			return next (new Error ("id must be integer"));
 		}
+		if ( !validateType(from, "integer") )
+		{
+			res.status(400);
+			return next (new Error ("from date must be integer"));
+		}
+		if ( !validateType(to, "integer") )
+		{
+			res.status(400);
+			return next (new Error ("to date must be integer"));
+		}
 		
 		//convert id to integer
                 const numChargerID = castType(id, "number");
@@ -138,7 +148,7 @@ const getSessions = async (req, res, next) =>
 		//empty list
 		if (resp.length === 0)
 		{
-			return res.status(201).sendData();
+			return res.status(204).sendData([]);
 		}
 		else
 		{

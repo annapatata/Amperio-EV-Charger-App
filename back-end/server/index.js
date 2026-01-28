@@ -14,9 +14,7 @@ const errorHandler = require('./middleware/errorHandler');
 // import routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
-const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const sessionRoutes = require('./routes/sessionRoutes');
 const stationRoutes = require('./routes/stationRoutes');
 const metaRoutes = require('./routes/metaRoutes');
 const requestedRoutes = require('./routes/requestedRoutes');
@@ -39,7 +37,6 @@ app.use('/api/station', stationRoutes);
 app.use('/api/reservations', reservationsRoutes);
 app.use('/api/userStats', userStatsRoutes);
 app.use('/api/adminStats', adminStatsRoutes);
-app.use('/api/entsoe', chargerRoutes);
 app.use('/api/meta',metaRoutes);
 // lame clownish goofy-ass mount
 app.use('/api', requestedRoutes);
@@ -81,7 +78,7 @@ if (USE_HTTPS) {
 }
 
 //Schedule the price fetching at 1:00 every day
-cron.schedule('26 15 * * *', async () => {
+cron.schedule('19 16 * * *', async () => {
     let prices = await daemon.getPrices();
     while (!prices) {
         console.log("Failed to fetch prices from ENTSOE.");
@@ -92,6 +89,6 @@ cron.schedule('26 15 * * *', async () => {
     await daemon.savePriceList(prices);
 });
 
-cron.schedule('*/15 * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
     await daemon.updateChargerPointPrices();
 });

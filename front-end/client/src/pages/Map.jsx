@@ -103,7 +103,7 @@ export default function Map() {
       setTimeout(() => {
         setSelectedStation(res.data);
         setSidebarVisible(true);
-      }, 2000);
+      }, 1600);
     } catch (err) {
       console.error("Error fetching details:", err);
       setSelectedStation(null);
