@@ -119,7 +119,7 @@ export default function StationDetails({ station, onClose }) {
 
                   {/* Corrected logic to use charger_status to match your status above */}
                   {charger.charger_status === 'available' && (
-                    <button className="reserve-btn">Reserve Now</button>
+                    <button className="reserve-btn">Reserve</button>
                   )}
                 </div>
               ))

@@ -23,11 +23,17 @@ const getPoints = async (req, res, next) => {
 
             // If valid, fetch filtered points using the static method
             const points = await Charger.getByStatus(status);
+		if(points.length === 0) {
+			return res.status(204).sendData(points);
+		}
             return res.status(200).sendData(points);
         }
 
         // CASE 2: No status provided, return all points
         const points = await Charger.getAllChargers();
+		if(points.length === 0) {
+			return res.status(204).sendData(points);
+		}
         return res.status(200).sendData(points);
 
     } catch (error) {
@@ -48,12 +54,9 @@ const getPointDetails = async (req, res, next) => {
         // 1. Fetch data
         const point = await Charger.getById(id);
         
-        // Prevent browser caching
-        res.setHeader('Cache-Control', 'no-cache');
-
-        // 2. Handle 404 - Not Found
+        // 2. Handle 204 - Not Found
         if (!point) {
-            res.status(404);
+            res.status(204);
             return next(new Error(`Point with ID ${id} not found`));
         }
 
@@ -252,6 +255,10 @@ const getTimePointStatus= async (req, res,next) => {
             `${sqlFrom} 00:00`, 
             `${sqlTo} 23:59`
         );
+
+        if (results.length === 0) {
+            return res.status(204).send();
+        }
 
         res.status(200).json(results);
 

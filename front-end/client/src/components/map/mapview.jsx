@@ -12,14 +12,14 @@ function SetViewOnStation({ selectedStation }) {
       map.flyTo(
         [selectedStation.latitude, selectedStation.longitude], 
         16, 
-        { animate: true, duration: 1.8 }
+        { animate: true, duration: 1.3 }
       );
     } else if (!selectedStation) {
       // zoom out
       map.flyTo(
         [37.9838, 23.7275], 
         13, 
-        { animate: true, duration: 1.5 }
+        { animate: true, duration: 1.3 }
       );
     }
   }, [selectedStation, map]);

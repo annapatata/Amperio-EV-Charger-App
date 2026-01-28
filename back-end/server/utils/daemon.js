@@ -126,12 +126,29 @@ const fetchCurrentPrice = async () => {
 const updateChargerPointPrices = async () => {
 
     //Get current price converted to KWh
-    const current_price = Number((await fetchCurrentPrice() / 1000).toFixed(3));
-    if (!current_price) {
+    const wholesale_price = Number((await fetchCurrentPrice() / 1000).toFixed(3));
+    if (wholesale_price) {
         let chargers = await Charger.getAllChargers();
 
+        const priceMap = {
+            11: 1.5,
+            22: 1.7,
+            50: 1.9,
+            120: 2.2,
+            180: 2.5
+        };
+
+        const priceCap = 0.6;
+
         chargers.forEach(async c => {
-        await Charger.setKwhPrice(c.pointid, current_price);
+            const multiplier = priceMap[c.cap] || 1; // Default to 1 if power not in map
+            let final_price = wholesale_price * multiplier;
+
+            if (final_price > priceCap) {
+                final_price = priceCap;
+            }
+
+            await Charger.setKwhPrice(c.pointid, final_price.toFixed(3));
         });
     }
     //Maybe add an else statement to fall back to a default price here
