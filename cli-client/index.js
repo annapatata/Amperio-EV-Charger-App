@@ -23,9 +23,21 @@ program
 	.description("CLI for my REST API")
 	.version("1.0.0");
 
-
-if (process.argv.length <= 2) {
-	program.help();
+// If no arguments, show all scopes and their parameters
+if (process.argv.length === 2) {
+  console.log('Available scopes and parameters:');
+  console.log('healthcheck: No parameters');
+  console.log('resetpoints: No parameters');
+  console.log('addpoints: --source <filename>');
+  console.log('points: --status <status> [--format <format>]');
+  console.log('point: --id <id>');
+  console.log('reserve: --id <id> --minutes <minutes>');
+  console.log('updpoint: --id <id> [--status <status>] [--price <price>] (at least one of status or price)');
+  console.log('newsession: --id <id> --starttime <starttime> --endtime <endtime> --startsoc <startsoc> --endsoc <endsoc> --totalkwh <totalkwh> --kwhprice <kwhprice> --amount <amount>');
+  console.log('sessions: --id <id> --from <from> --to <to> [--format <format>]');
+  console.log('pointstatus: --id <id> --from <from> --to <to> [--format <format>]');
+  program.help();
+  process.exit(0);
 }
 
 program
