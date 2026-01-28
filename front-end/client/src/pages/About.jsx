@@ -67,7 +67,7 @@ export default function About() {
         <div className="about-content-section">
           <h2>Developers</h2>
           <p>
-            This was made by Anthropomorphic Potato, Nelly, Antoine, Horse and Fiction. 
+            This was made by Anthropomorphic Potato, Nelly, Antoine, AnnaPatata and Fiction. 
           </p>
         </div>
 

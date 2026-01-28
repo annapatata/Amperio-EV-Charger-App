@@ -61,7 +61,7 @@
     left: 50%;
     transform: translateX(-50%); /* Centers the search bar */
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     background: transparent; /* Transparent so map shows between search and pills */
     display: flex;
     flex-direction: column;

@@ -14,7 +14,9 @@ class StationModel {
                 WHEN SUM(CASE WHEN c.charger_status = 'charging' THEN 1 ELSE 0 END) > 0 THEN 'charging'
                 WHEN SUM(CASE WHEN c.charger_status = 'reserved' THEN 1 ELSE 0 END) > 0 THEN 'reserved'
                 ELSE 'offline'
-            END AS station_status
+            END AS station_status,
+            SUM(CASE WHEN c.charger_status = 'available' THEN 1 ELSE 0 END) AS available_chargers,
+            COUNT(CASE WHEN c.charger_id IS NOT NULL THEN 1 END) AS total_chargers
         FROM Station s
         LEFT JOIN Charger c ON s.station_id = c.station_id
         GROUP BY s.station_id

@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { getMarkerIcon } from "../../utils/mapIcons";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import "./mapview.css";
 
 //zooming on selected station
 function SetViewOnStation({ selectedStation }) {
@@ -27,13 +28,39 @@ function SetViewOnStation({ selectedStation }) {
   return null;
 }
 
-export default function MapView({stations, onStationClick,selectedStation}) {
+export default function MapView({ stations, onStationClick, selectedStation }) {
+  const [hoveredStationId, setHoveredStationId] = useState(null);
+  const markerRefs = useRef({});
+
+  const getAvailableChargers = (station) => {
+    // Προσοχή: Βεβαιώσου ότι το backend επιστρέφει αυτά τα ονόματα πεδίων
+    // Αν χρησιμοποιείς το προηγούμενο SQL query, ίσως χρειαστεί να υπολογίσεις 
+    // τα counts εκεί ή να τα στείλεις ως εξτρά πεδία.
+    if (station.total_chargers > 0) {
+      return `${station.available_chargers || 0}/${station.total_chargers}`;
+    }
+    return null;
+  };
+
+  const handleMarkerMouseEnter = (stationId) => {
+    const marker = markerRefs.current[stationId];
+    if (marker) {
+      marker.openPopup();
+    }
+  };
+
+  const handleMarkerMouseLeave = (stationId) => {
+    const marker = markerRefs.current[stationId];
+    if (marker) {
+      marker.closePopup();
+    }
+  };
+
   return (
-    <MapContainer //boss component , creates the map object
-      center={[37.9838, 23.7275]}   // Athens
-      zoom={13} //1 is the whole world, 18 is a street corner, 13 a city view
-      style={{ height: "100%", width: "100%", }}
-    // DEBUG
+    <MapContainer
+      center={[37.9838, 23.7275]}
+      zoom={13}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
 	attribution='&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -42,18 +69,32 @@ export default function MapView({stations, onStationClick,selectedStation}) {
 
       {stations && stations.map((station) => {
         const isSelected = selectedStation?.station_id === station.station_id;
+        const chargerText = getAvailableChargers(station);
+
         return (
           <Marker
             key={station.station_id}
+            ref={(el) => (markerRefs.current[station.station_id] = el)}
             position={[station.latitude, station.longitude]}
-            //use the status directly from the databse result
-            icon={getMarkerIcon(station.station_status,isSelected)} // Apply the custom icon here
+            icon={getMarkerIcon(station.station_status, isSelected)}
             eventHandlers={{
-              click: () => {
-                onStationClick(station); //this triggers the sidebar to open
-              },
+              click: () => onStationClick(station),
+              mouseover: () => handleMarkerMouseEnter(station.station_id),
+              mouseout: () => handleMarkerMouseLeave(station.station_id),
             }}
           >
+            {chargerText && (
+              <Popup 
+                className="charger-popup" 
+                closeButton={false} 
+                autoPan={false} // Εμποδίζει το χάρτη να "πηδάει" στο hover
+                offset={[0, -10]} // Μετακινεί το popup λίγο πιο πάνω από το εικονίδιο
+              >
+                <div className="charger-popup-content">
+                  ⚡ {chargerText}
+                </div>
+              </Popup>
+            )}
           </Marker>
         );
       })}

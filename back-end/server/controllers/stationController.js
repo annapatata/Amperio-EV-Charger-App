@@ -4,11 +4,34 @@ const db = require('../config/db');
 
 const searchStations = async (req, res, next) => {
     try {
-        const { q, power, connector, available, facilities,score } = req.query;
+        const { q, power, connector, available, facilities, score } = req.query;
 
-        console.log('Search params:', req.query);
+        let queryParams = [];
+        let chargerFilters = [];
 
-        // Using LEFT JOIN ensures stations show up even if chargers aren't fully mapped
+        // 1. Προετοιμασία φίλτρων (Power & Connector)
+        if (power && power !== "" && power !== 'undefined') {
+            const powerArray = power.split(',').map(p => Number(p.trim())).filter(p => !isNaN(p));
+            if (powerArray.length > 0) {
+                const placeholders = powerArray.map(() => '?').join(', ');
+                chargerFilters.push(`ch.power IN (${placeholders})`);
+                queryParams.push(...powerArray);
+            }
+        }
+
+        if (connector && connector !== "" && connector !== 'undefined') {
+            const connectorArray = connector.split(',').map(c => c.trim()).filter(c => c);
+            if (connectorArray.length > 0) {
+                const placeholders = connectorArray.map(() => '?').join(', ');
+                chargerFilters.push(`ch.connector_type IN (${placeholders})`);
+                queryParams.push(...connectorArray);
+            }
+        }
+
+        // 2. Κατασκευή Query
+        // Χρησιμοποιούμε INNER JOIN αν υπάρχουν φίλτρα φορτιστή για να "πετάξουμε" τους σταθμούς που δεν ταιριάζουν
+        const joinType = chargerFilters.length > 0 ? 'INNER JOIN' : 'LEFT JOIN';
+
         let queryText = `
             SELECT s.station_id, 
                 s.address, 
@@ -21,101 +44,45 @@ const searchStations = async (req, res, next) => {
                     WHEN SUM(CASE WHEN ch.charger_status = 'charging' THEN 1 ELSE 0 END) > 0 THEN 'charging'
                     WHEN SUM(CASE WHEN ch.charger_status = 'reserved' THEN 1 ELSE 0 END) > 0 THEN 'reserved'
                     ELSE 'offline'
-                END AS station_status
+                END AS station_status,
+                SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) AS available_chargers,
+                COUNT(CASE WHEN ch.charger_id IS NOT NULL THEN 1 END) AS total_chargers
             FROM Station s
-            LEFT JOIN Charger ch ON s.station_id = ch.station_id
+            ${joinType} Charger ch ON s.station_id = ch.station_id
+            ${chargerFilters.length > 0 ? ` AND ${chargerFilters.join(' AND ')}` : ''}
             WHERE 1=1
         `;
-        let queryParams = [];
-        let havingClauses = [];
 
-        // 1. Text Search (MySQL LIKE is case-insensitive by default with most collations)
+        // 3. Φίλτρα Σταθμού
         if (q) {
             const searchPattern = `%${q}%`;
-            // We push the pattern twice because we have two '?' in the OR statement
-            queryParams.push(searchPattern, searchPattern);
             queryText += ` AND (s.address LIKE ? OR s.facilities LIKE ?)`;
+            queryParams.push(searchPattern, searchPattern);
         }
 
-        // 2. Power Filter
-        if (power && power !== "" && power !== 'undefined') {
-            const powerArray = power.split(',').map(p=>Number(p.trim())).filter(p=>!isNaN(p));
-            // For multiple power levels, we can use IN clause
-            if (powerArray.length > 0) {
-                //creates "AND EXISTS ..." 
-                const placeholders = powerArray.map(()=>'?').join(', ');
-                queryText += ` AND EXISTS (SELECT 1 FROM Charger ch_filter WHERE ch_filter.station_id = s.station_id AND ch_filter.power IN (${placeholders}))`;
-                queryParams.push(...powerArray);
-            }
-        }
-
-        // 3. Connector Filter
-        if (connector && connector !== "" && connector !=='undefined') {
-            const connectorArray = connector.split(',').map(c=>c.trim()).filter(c=>c);
-            // For multiple connectors, we can use IN clause
-            if (connectorArray.length > 0) {
-                const placeholders = connectorArray.map(() => '?').join(', ');
-                queryText += ` AND EXISTS (SELECT 1 FROM Charger ch_filter WHERE ch_filter.station_id = s.station_id AND ch_filter.connector_type IN (${placeholders}))`;
-                queryParams.push(...connectorArray);
-            }
-        }
-
-
-        // 5. Facilities Filter - handle comma-separated string
         if (facilities && facilities !== "" && facilities !== 'undefined') {
-            // facilities comes as a comma-separated string from URL params
-            const facilitiesArray = typeof facilities === 'string'
-                ? facilities.split(',').map(f => f.trim()).filter(f => f)
-                : (Array.isArray(facilities) ? facilities : []);
-
+            const facilitiesArray = typeof facilities === 'string' ? facilities.split(',') : (Array.isArray(facilities) ? facilities : []);
             if (facilitiesArray.length > 0) {
-                // Create OR conditions: s.facilities LIKE ? OR s.facilities LIKE ? ...
                 const orConditions = facilitiesArray.map(() => 's.facilities LIKE ?').join(' OR ');
                 queryText += ` AND (${orConditions})`;
-                // Push each facility as a search pattern (with % wildcards)
-                facilitiesArray.forEach(f => {
-                    queryParams.push(`%${f}%`);
-                });
+                facilitiesArray.forEach(f => queryParams.push(`%${f.trim()}%`));
             }
         }
 
-        //6. Score Filter
-        // 6. Score Filter - Selects stations with score >= lowest selected value
-if (req.query.score && req.query.score !== "" && req.query.score !== 'undefined') {
-    const scoreArray = req.query.score.split(',')
-        .map(s => Number(s.trim()))
-        .filter(s => !isNaN(s));
+        if (score && score !== "" && score !== 'undefined') {
+            const minScore = Math.min(...score.split(',').map(Number));
+            queryText += ` AND s.score >= ?`;
+            queryParams.push(minScore);
+        }
 
-    if (scoreArray.length > 0) {
-        // Find the lowest score selected (e.g., if user picks 3 and 4, we want >= 3)
-        const minScore = Math.min(...scoreArray);
-        
-        queryText += ` AND s.score >= ?`;
-        queryParams.push(minScore);
-    }
-}
-
-        // 2. Add the GROUP BY so the aggregate functions (SUM) work
         queryText += ` GROUP BY s.station_id`;
 
-        // 7. Availability Filter (applied as HAVING)
+        // 4. Availability Filter
         if (available === 'true') {
-            havingClauses.push(`SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0`);
+            queryText += ` HAVING SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0`;
         }
 
-        if (havingClauses.length > 0) {
-            queryText += ` HAVING ${havingClauses.join(' AND ')}`;
-        }
-
-        console.log('Final queryText:', queryText);
-        console.log('queryParams:', queryParams);
-
-        // For MySQL, 'db.query' usually returns [rows, fields]
         const [rows] = await db.query(queryText, queryParams);
-        
-        console.log('Result rows length:', rows.length);
-
-        // Send the rows directly
         res.status(200).json(rows);
 
     } catch (error) {

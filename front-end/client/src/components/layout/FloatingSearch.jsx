@@ -1,16 +1,47 @@
 import { useState, useEffect, useRef , useContext} from "react";
 import { AuthContext } from "../../context/AuthContext";
-
 import api from "../../axiosConfig";
 import "../../styles/FacilitiesGrid.css";
 
 export default function FloatingSearch({ onSearch, filters, stations, onStationClick }) {
   const [options, setOptions] = useState({ connectors: [], powers: [], facilities: [], score: [] });
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const { user } = useContext(AuthContext);
   const wrapperRef = useRef(null);
+  const [inputValue, setInputValue] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false); // Νέο state
+
+
+  const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    // Στέλνουμε το κείμενο στο Map.jsx μέσω της handleSearch
+    onSearch({ q: inputValue });
+    
+    // Κλείνουμε το dropdown των προτάσεων αν υπάρχει
+    setShowSuggestions(false);
+     setSuggestions([]); 
+  }
+};
+
+// Διαχείριση αλλαγής κειμένου
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+
+    if (value.length > 1) {
+      // Φιλτράρουμε απευθείας εδώ αντί για useEffect
+      const filtered = stations.filter(s =>
+        s.address.toLowerCase().includes(value.toLowerCase())
+      ).slice(0, 5);
+      setSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      if (value === "") onSearch({ q: "" });
+    }
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -24,17 +55,6 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
     };
   }, []);
 
-
-  useEffect(() => {
-    if (query.length > 1) {
-      const filtered = stations.filter(s =>
-        s.address.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 5) //limit to top 5 results
-      setSuggestions(filtered);
-    } else {
-      setSuggestions([]);
-    }
-  }, [query, stations]);
 
   //helper function to bold the matching text
   const getHighlightedText = (text, highlight) => {
@@ -93,23 +113,37 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
           <span className="search-icon">🔍</span>
           <input
             type="text"
-            value={query}
+            value={inputValue}
+            onKeyDown={handleKeyDown}
+            onFocus={() => {
+                if (inputValue.length > 1) setShowSuggestions(true);
+            }}
             placeholder="Find charging stations..."
-            onChange={(e) => { setQuery(e.target.value); onSearch({ q: e.target.value }); }}
+            onChange={handleInputChange} // Χρήση της νέας συνάρτησης
           />
+          {/* Προαιρετικό: Ένα "X" για καθαρισμό */}
+          {inputValue && (
+            <span 
+              className="clear-icon" 
+              onClick={() => { setInputValue(""); onSearch({ q: "" }); setShowSuggestions(false); setSuggestions([]); }}
+              style={{ cursor: 'pointer', marginRight: '10px' }}
+            >
+              ✖
+            </span>
+          )}
         </div>
 
-        {/* Suggestions Dropdown */}
-        {suggestions.length > 0 && (
+        {showSuggestions &&suggestions.length > 0 && (
           <ul className="suggestions-list">
             {suggestions.map((s) => (
               <li key={s.station_id} onClick={() => {
-                onStationClick(s); // Opens the sidebar
-                setQuery("");      // Clear search
+                onStationClick(s);
+                setShowSuggestions(false);
                 setSuggestions([]);
-                onSearch({ q: "" }) //tells the map to fetch all stations again. 
+                // Εδώ ΔΕΝ σβήνουμε το inputValue για να βλέπει ο χρήστης τι επέλεξε
               }}>
-                {getHighlightedText(s.address, query)}
+                {/* Χρήση του inputValue για το highlight */}
+                {getHighlightedText(s.address, inputValue)}
               </li>
             ))}
           </ul>
@@ -184,7 +218,7 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
           className={`filter-pill ${filters.available ? 'active' : ''}`}
           onClick={() => toggleFilter('available', true)}
         >
-          Available Now
+          Available
         </button>
 
         {/* Facilities Pill */}

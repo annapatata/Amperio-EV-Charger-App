@@ -1,0 +1,27 @@
+.charger-popup .leaflet-popup-content-wrapper {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+.charger-popup .leaflet-popup-content {
+  margin: 8px 12px;
+  font-size: 0;
+}
+
+.charger-popup-content {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.charger-popup .leaflet-popup-tip {
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
