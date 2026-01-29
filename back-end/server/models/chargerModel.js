@@ -68,6 +68,7 @@ class ChargerModel {
 	}
 
 	  static async create(chargerData, connection) {
+        const conn = connection || db;
         const query = `
             INSERT INTO Charger (charger_id, power, connector_type, station_id, installed_at, last_checked, charger_status, current_price)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -83,14 +84,20 @@ class ChargerModel {
             chargerData.current_price
         ];
 
-        return connection.query(query, params);
+        return conn.query(query, params);
     }
            
      static async deleteAll(connection) {
+        const conn = connection || db;
         const query = "DELETE FROM Charger";
-        return connection.query(query);
+        return conn.query(query);
     }
 
+    static async delete(charger_id) {
+        const query = "DELETE FROM Charger WHERE charger_id = ?";
+        const [result] = await db.query(query, [charger_id]);
+        return result;
+    }
 };
 
 

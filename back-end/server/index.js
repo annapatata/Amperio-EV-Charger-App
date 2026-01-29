@@ -52,43 +52,49 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 9876;
-const USE_HTTPS = process.env.USE_HTTPS === 'true';
 
-if (USE_HTTPS) {
-  // 🔐 HTTPS MODE (only if certs exist)
-  try {
-    const sslOptions = {
-      key: fs.readFileSync('server.key'),
-      cert: fs.readFileSync('server.cert'),
-    };
+// Start server only if the file is executed directly
+if (require.main === module) {
+  const USE_HTTPS = process.env.USE_HTTPS === 'true';
 
-    https.createServer(sslOptions, app).listen(PORT, () => {
-      console.log(`🔐 HTTPS server running at https://localhost:${PORT}`);
+  if (USE_HTTPS) {
+    // 🔐 HTTPS MODE (only if certs exist)
+    try {
+      const sslOptions = {
+        key: fs.readFileSync('server.key'),
+        cert: fs.readFileSync('server.cert'),
+      };
+      
+      https.createServer(sslOptions, app).listen(PORT, () => {
+        console.log(`🔐 HTTPS server running at https://localhost:${PORT}`);
+      });
+    } catch (err) {
+      console.error('❌ HTTPS enabled but cert files missing.');
+      console.error('👉 Either add server.key/server.cert or set USE_HTTPS=false');
+      process.exit(1);
+    }
+  } else {
+    // 🌍 HTTP MODE (default, safe for all teammates)
+    http.createServer(app).listen(PORT, () => {
+      console.log(`🌍 HTTP server running at http://localhost:${PORT}`);
     });
-  } catch (err) {
-    console.error('❌ HTTPS enabled but cert files missing.');
-    console.error('👉 Either add server.key/server.cert or set USE_HTTPS=false');
-    process.exit(1);
   }
-} else {
-  // 🌍 HTTP MODE (default, safe for all teammates)
-  http.createServer(app).listen(PORT, () => {
-    console.log(`🌍 HTTP server running at http://localhost:${PORT}`);
+
+  //Schedule the price fetching at 1:00 every day
+  cron.schedule('19 16 * * *', async () => {
+      let prices = await daemon.getPrices();
+      while (!prices) {
+          console.log("Failed to fetch prices from ENTSOE.");
+          cron.schedule('* */1 * * *', async () => {
+              prices = await daemon.getPrices();
+          });
+      }
+      await daemon.savePriceList(prices);
+  });
+
+  cron.schedule('*/1 * * * *', async () => {
+      await daemon.updateChargerPointPrices();
   });
 }
 
-//Schedule the price fetching at 1:00 every day
-cron.schedule('19 16 * * *', async () => {
-    let prices = await daemon.getPrices();
-    while (!prices) {
-        console.log("Failed to fetch prices from ENTSOE.");
-        cron.schedule('* */1 * * *', async () => {
-            prices = await daemon.getPrices();
-        });
-    }
-    await daemon.savePriceList(prices);
-});
-
-cron.schedule('*/1 * * * *', async () => {
-    await daemon.updateChargerPointPrices();
-});
+module.exports = app;

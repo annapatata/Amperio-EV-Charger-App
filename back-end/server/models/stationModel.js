@@ -62,11 +62,13 @@ class StationModel {
     }
 
     static async deleteAll(connection) {
+        const conn = connection || db;
         const query = "DELETE FROM Station";
-        return connection.query(query);
+        return conn.query(query);
     }
 
     static async create(stationData, connection) {
+        const conn = connection || db;
         const query = `
             INSERT INTO Station (station_id, station_name, address, longitude, latitude, postal_code, facilities, google_maps_link, score)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -83,9 +85,14 @@ class StationModel {
             stationData.score
         ];
 
-        return connection.query(query, params);
+        return conn.query(query, params);
     }
 
+    static async delete(station_id) {
+        const query = "DELETE FROM Station WHERE station_id = ?";
+        const [result] = await db.query(query, [station_id]);
+        return result;
+    }
 };
 
 module.exports = StationModel;

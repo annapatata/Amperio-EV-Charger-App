@@ -22,7 +22,12 @@ const resetpoints = async (req, res, next) => {
         connection = await db.getConnection();
         await connection.beginTransaction();
 
-        //delete existing data  
+        //delete existing data from dependent tables first
+        await connection.query("DELETE FROM ChargerStatusHistory");
+        await connection.query("DELETE FROM Session");
+        await connection.query("DELETE FROM Reservation");
+        
+        // now delete from the parent tables
         await Charger.deleteAll(connection);
         await Station.deleteAll(connection);
 

@@ -35,6 +35,12 @@ class sessionModel
 		const [rows] = await db.query(sql, [id, startTime, endTime]);
 		return rows;
 	}
+
+    static async deleteByUserId(user_id) {
+        const sql = 'DELETE FROM Session WHERE user_id = ?';
+        const [result] = await db.query(sql, [user_id]);
+        return result;
+    }
 }
 
 module.exports = sessionModel;

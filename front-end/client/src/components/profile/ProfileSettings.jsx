@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import api from "../../axiosConfig";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/profile/ProfileSettings.css";
@@ -18,6 +18,7 @@ const ProfileSettings = ({ profile }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [powerOptions, setPowerOptions] = useState([]);
     const [connectorOptions, setConnectorOptions] = useState([]);
+    const feedbackRef = useRef(null);
     
     // Password visibility states
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -37,6 +38,25 @@ const ProfileSettings = ({ profile }) => {
         };
         fetchOptions();
     }, []);
+
+    useEffect(() => {
+        if (profile) {
+            setFormData({
+                username: profile.username || "",
+                email: profile.email || "",
+                default_charger_power: profile.default_charger_power || "",
+                default_connector_type: profile.default_connector_type || "",
+                newPassword: "",
+                confirmPassword: ""
+            });
+        }
+    }, [profile]);
+
+    useEffect(() => {
+        if (status.message && feedbackRef.current) {
+            feedbackRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+    }, [status.message]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -257,7 +277,7 @@ const ProfileSettings = ({ profile }) => {
                 </button>
 
                 {status.message && (
-                    <div className={`feedback-msg ${status.type}`}>
+                    <div ref={feedbackRef} className={`feedback-msg ${status.type}`}>
                         {status.message}
                     </div>
                 )}

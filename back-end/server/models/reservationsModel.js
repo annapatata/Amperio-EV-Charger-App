@@ -14,6 +14,24 @@ class ReservationsModel {
 		const [rows] = await db.query(sql, id);
 		return rows;
 	}
+
+    static async create(user_id, charger_id, reservation_start_time, reservation_end_time) {
+        const sql = 'INSERT INTO Reservation (user_id, charger_id, reservation_start_time, reservation_end_time) VALUES (?, ?, ?, ?)';
+        const [result] = await db.query(sql, [user_id, charger_id, reservation_start_time, reservation_end_time]);
+        return result;
+    }
+
+    static async delete(reservation_id) {
+        const sql = 'DELETE FROM Reservation WHERE reservation_id = ?';
+        const [result] = await db.query(sql, [reservation_id]);
+        return result;
+    }
+
+    static async deleteByUserId(user_id) {
+        const sql = 'DELETE FROM Reservation WHERE user_id = ?';
+        const [result] = await db.query(sql, [user_id]);
+        return result;
+    }
 }
 
 module.exports = ReservationsModel;
