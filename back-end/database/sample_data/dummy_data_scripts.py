@@ -8,7 +8,7 @@ import calendar
 num_records = int(sys.argv[1])
 
 # ---------- Configuration ----------
-endpoint = "http://localhost:9876/api/newsession"  # <-- replace with your API
+endpoint = "https://localhost:9876/api/newsession"  # <-- replace with your API
 headers = {
     "Content-Type": "application/json",
 }
@@ -55,7 +55,7 @@ for i in range(num_records):
     record = generate_dummy_session(charger_id)
     print(record)
     try:
-        response = requests.post(endpoint, headers=headers, json=record)
+        response = requests.post(endpoint, headers=headers, json=record, verify=False)
         if response.status_code in (200, 201):
             print(f"[✓] Record {i+1} posted successfully")
             success_count += 1
