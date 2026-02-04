@@ -22,7 +22,9 @@ Here is a general overview of what is contained in each folder of the repo
 ### 🚀Quick Setup Guide
 
 #### 1. Prerequisites
-To run this you will need the latest version of Node JS and MySQL
+To run this you will need:
+ - The latest version of Node JS and MySQL
+ - An ENTSOE API token
 #### 2. Setup
 Clone the repo to your desired file location and run
 
@@ -34,7 +36,9 @@ then thorugh your DB client or using the terminal run the scripts in the /back-e
  3. `Views.sql`
  4. `Triggers.sql` 
 
-//gotta add cli set up somewhere as well
+Lastly, make sure to set the environemntal variables. Rename the `.env.example` file to `.env` and change the contents to match your data.  
+(for more info on what each environmental variable does see [Backend README](back-end/README.md))
+
 
 #### 3. Run
 To run the backend server simply open a terminal in the back-end/server folder and type
@@ -43,6 +47,10 @@ To run the backend server simply open a terminal in the back-end/server folder a
 To run the frontend open a seperate terminal in the front-end/client folder and type
 
 	npm run dev
+
+#### 4. CLI
+Optionally you can now link the CLI to use it globaly on your machine by running se2519 anywhere on the terminal  
+(see [CLI README](cli-client/README.md) for a list of CLI commands)
 
 ### 🛠Features
  - Real-time Map: Find chargers near your current location.
