@@ -54,9 +54,9 @@ const getPointDetails = async (req, res, next) => {
         // 1. Fetch data
         const point = await Charger.getById(id);
         
-        // 2. Handle 204 - Not Found
+        // 2. Handle 404 - Not Found
         if (!point) {
-            res.status(204);
+            res.status(404);
             return next(new Error(`Point with ID ${id} not found`));
         }
 

@@ -135,12 +135,16 @@ program
 			try
 			{
 				const res = await api.get(`/point/${opts.id}`);
-
 				console.log(res.data);
 			}
 			catch (err)
 			{
-				console.error("Error fetching points:", err.message);
+				// If the server sends a JSON error response, print it.
+				if (err.response && err.response.data) {
+					console.error(JSON.stringify(err.response.data, null, 2));
+				} else {
+					console.error("Error fetching points:", err.message);
+				}
 			}
 		});
 

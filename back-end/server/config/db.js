@@ -2,6 +2,10 @@ const mysql = require('mysql2');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
+if (process.env.NODE_ENV === 'test') {
+  process.env.DB_NAME = process.env.DB_TEST_NAME;
+}
+
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
