@@ -84,10 +84,11 @@ if (require.main === module) {
   (async () => {
       let prices = await daemon.getPrices();
       await daemon.savePriceList(prices);
+      await daemon.updateChargerPointPrices();
   })();
 
   //Schedule the price fetching at 1:00 every day
-  cron.schedule('50 16 * * *', async () => {
+  cron.schedule('00 1 * * *', async () => {
       let prices = await daemon.getPrices();
       while (!prices) {
           console.log("Failed to fetch prices from ENTSOE.");
@@ -98,7 +99,7 @@ if (require.main === module) {
       await daemon.savePriceList(prices);
   });
 
-  cron.schedule('*/1 * * * *', async () => {
+  cron.schedule('*/15 * * * *', async () => {
       await daemon.updateChargerPointPrices();
   });
 }
