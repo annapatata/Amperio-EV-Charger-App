@@ -10,20 +10,54 @@ const __dirname = path.dirname(__filename);
 
 const execPromise = promisify(exec);
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+const registerTestUser = async () => {
+  try {
+    const response = await fetch('https://localhost:9876/api/auth/signup', { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: "testuser",
+        password: "password123",
+        email: "test@example.com"
+      })
+    });
+
+    // If it fails (and it's not just "user already exists"), throw error
+    if (!response.ok && response.status !== 400) {
+        const txt = await response.text();
+        throw new Error(`Failed to register user: ${response.status} ${txt}`);
+    }
+  } catch (error) {
+    // Log the 'cause' to see underlying network errors (ECONNREFUSED, etc.)
+    console.error("User registration failed:", error.message);
+    if (error.cause) console.error("Cause:", error.cause); 
+  }
+};
+
 // Helper function to run the CLI command
 const runCli = (command) => {
   const cliPath = './index.js'; // Path to the CLI entry point
-  return execPromise(`node ${cliPath} ${command}`, { env: process.env });
+  return execPromise(`node --no-warnings ${cliPath} ${command}`, { env: process.env });
 };
 
 describe('CLI Commands', () => {
+
+    beforeAll(async () => {
+      await registerTestUser();
+  });
+
 
   // Before each test, reset the database to a known state.
   beforeEach(async () => {
     const { stdout, stderr } = await runCli('resetpoints');
     expect(stderr).toBe('');
     expect(stdout).toContain('Data reset to initial state successfully.');
+    
+
   });
+
 
   // --- se2519 points ---
   describe('points command', () => {
