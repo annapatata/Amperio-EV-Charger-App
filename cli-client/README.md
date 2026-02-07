@@ -11,7 +11,6 @@ Before using the CLI, ensure the **Backend Server** is running.
 ```bash
 cd cli-client
 npm install
-
 ```
 
 
@@ -19,7 +18,6 @@ npm install
 Still in the cli-client directory, run:
 ```bash
 npm link
-
 ```
 
 Now you can run the cli anywhere in the terminal using the keyword se2519   
@@ -40,6 +38,8 @@ Starting with the keyword `se2519` you can type any of the following commands to
 | **newsession** | ***`--id`***, ***`--starttime`***, ***`--endtime`***, ***`--startsoc`***, ***`--endsoc`***, ***`--totalkwh`***, ***`--kwhprice`***, ***`--amount`*** |  | `/newsession` |
 | **sessions** | ***`--id`***, ***`--from`***, ***`--to`***, `--format` |  | `/sessions` |
 | **pointstatus** | ***`--id`***, ***`--from`***, ***`--to`***, `--format` |  | `/pointstatus` |
+
+**Note**: Parameters marked with bold italics are mandatory for the respective command.
 
 ## 🛠 Troubleshooting
 
