@@ -1,7 +1,9 @@
 # 💻 Amperio | CLI Client
 
 The Amperio CLI is a terminal-based tool designed for administrators to allow for direct interaction with the Amperio API without needing a web browser.
-This directory contains all the Node JS files required to run the CLI.
+This directory contains:
+ - all the Node JS files required to run the CLI.
+ - a `/tests` directory with test cases for the CLI commands.
 
 ## 🛠 Setup & Installation
 
@@ -40,6 +42,16 @@ Starting with the keyword `se2519` you can type any of the following commands to
 | **pointstatus** | ***`--id`***, ***`--from`***, ***`--to`***, `--format` |  | `/pointstatus` |
 
 **Note**: Parameters marked with bold italics are mandatory for the respective command.
+
+## 🧪 Testing
+To run the test cases for the CLI commands, ensure the **Backend Server** is running and then use the following command in the cli-client directory:
+
+```bash
+npm test healthcheck.test.js
+```
+to test the healthcheck command  
+
+**OR** run the `test_commands.sh` script to test all the other commands at once
 
 ## 🛠 Troubleshooting
 
