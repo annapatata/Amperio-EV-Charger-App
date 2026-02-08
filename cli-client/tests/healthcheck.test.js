@@ -15,11 +15,21 @@ describe('CLI healthcheck command', () => {
     const { stdout, stderr } = await runCli('healthcheck');
 
     expect(stderr).toBe('');
+
+    const data = JSON.parse(stdout);
     // Check for the presence of each key-value pair or key, since console.log's object formatting can vary.
-    expect(stdout).toMatch(/status: 'OK'/);
-    expect(stdout).toMatch(/dbconnection:/);
-    expect(stdout).toMatch(/n_charge_points:/);
-    expect(stdout).toMatch(/n_charge_points_online:/);
-    expect(stdout).toMatch(/n_charge_points_offline:/);
+    expect(data.status).toBe('OK');
+    expect(data).toHaveProperty('dbconnection');
+	  expect(typeof data.dbconnection).toBe('string');
+    expect(data).toHaveProperty('n_charge_points');
+	  expect(typeof data.n_charge_points).toBe('number');
+	  expect(data.n_charge_points).toBeGreaterThan(0);
+    expect(data).toHaveProperty('n_charge_points_online');
+	  expect(typeof data.n_charge_points_online).toBe('number');
+          expect(data.n_charge_points_online).toBeGreaterThan(0);
+    expect(data).toHaveProperty('n_charge_points_offline');
+	  expect(typeof data.n_charge_points_offline).toBe('number');
+          expect(data.n_charge_points_offline).toBeGreaterThan(0);
+	  expect(data.n_charge_points_offline + data.n_charge_points_online).toBe(data.n_charge_points);
   });
 });

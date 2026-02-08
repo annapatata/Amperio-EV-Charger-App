@@ -92,8 +92,8 @@ const healthcheck = async (req, res, next) => {
             status: "OK",
             dbconnection: connectionString,
             n_charge_points: stats.total,
-            n_charge_points_online: stats.online,
-            n_charge_points_offline: stats.offline
+            n_charge_points_online: Number(stats.online),
+            n_charge_points_offline: Number(stats.offline)
         });
 
     } catch (error) {

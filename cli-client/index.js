@@ -48,7 +48,7 @@ program
 			try 
 			{
 				const res = await api.get(`/admin/healthcheck`);
-				console.log((res.data));
+				console.log(JSON.stringify(res.data, null, 2));
 			} 
 			catch (err) { 
                                 if (err.response) {
@@ -374,6 +374,7 @@ program
                                         console.log(csv);
                                 }
                         }
+			}
 			catch (err) {
                                 if (err.response) {
                                 // API responded with an error status
