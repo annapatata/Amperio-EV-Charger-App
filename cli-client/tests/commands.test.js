@@ -150,7 +150,7 @@ it('should return error log for a non-existent point', async () => {
       const csvContent = 'id,name,address,latitude,longitude,outlet_id\n999,Test Add Station,456 Test Ave,38,-24,99901';
       await fs.writeFile(testCsvPath, csvContent);
       
-      const { stdout, stderr } = await runCli(`addpoints --source ${testCsvPath}`);
+      const { stdout, stderr } = await runCli(`addpoints --source "${testCsvPath}"`);
       expect(stderr).toBe('');
       expect(stdout).toContain('Upload successful');
       expect(stdout).toContain('Successfully imported 1 stations.');
