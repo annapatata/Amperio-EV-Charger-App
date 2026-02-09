@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
 
   if (!token) {
 	  res.status(401);
-    return next(new Error ("No token provided. Access denied.");
+    return next(new Error ("No token provided. Access denied."));
   }
 
   // 2. Remove the "Bearer " prefix if present (optional but standard)
