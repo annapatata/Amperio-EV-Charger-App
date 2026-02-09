@@ -27,7 +27,7 @@ Rename the `example.env` file to `.env` and add the following variables:
 |`DB_USER`|MySQL username| `root` |
 |`DB_PASSWORD`|MySQL password| `verystrongandsecurepassword` |
 |`DB_NAME`|Database name| `Amperio` |
-|`DB_TEST_NAME`|Name of DB to be used for testing(can be same as DB_NAME)| `Amperio` |
+|`DB_TEST_NAME`|Name of DB to be used for testing (can be same as DB_NAME)| `Amperio` |
 |`JWT_SECRET`|Secret key for JWT authentication| `can be whatever` |
 |`USE_HTTPS`|Enable HTTPS (true/false)| `true` |
 |`ENTSOE_TOKEN`|Token for ENTSOE API access| `your_entsoe_token_here` |
