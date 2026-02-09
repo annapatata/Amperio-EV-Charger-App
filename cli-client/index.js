@@ -174,7 +174,7 @@ program
 			try
 			{
 				const res = await api.get(`/point/${opts.id}`);
-				console.log(res.data);
+				console.log(JSON.stringify(res.data, null, 2));
 			}
 			catch (err) {
  				if (err.response) {
@@ -200,7 +200,7 @@ program
 		{
 			const url = opts.minutes ? `/reserve/${opts.id}/${opts.minutes}` : `/reserve/${opts.id}`;
 			const res = await api.post(url);
-			console.log(res.data);
+			console.log(JSON.stringify(res.data, null, 2));
 		} 
 		catch (err) { 
                                 if (err.response) {

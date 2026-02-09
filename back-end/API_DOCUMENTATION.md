@@ -3,12 +3,173 @@
 This document provides comprehensive documentation for all API endpoints in the Amperio charging station management system.
 
 ## Table of Contents
+- [Admin Routes](#admin-routes)
+- [Admin Stats Routes](#admin-stats-routes)
 - [Authentication Routes](#authentication-routes)
 - [Meta Routes](#meta-routes)
 - [Station Routes](#station-routes)
+- [Requested Routes](#requested-routes)
 - [Reservations Routes](#reservations-routes)
 - [User Routes](#user-routes)
 - [User Stats Routes](#user-stats-routes)
+
+---
+
+## Admin Routes
+
+**File:** [`back-end/server/routes/adminRoutes.js`](../back-end/server/routes/adminRoutes.js)
+
+Base URL: `/api/admin`
+
+### GET /healthcheck
+
+Checks connection status of user to database.
+
+**Endpoint:** `GET /api/admin/healthcheck`
+
+**Request Parameters:** no parameters required
+
+**Response (200 Success):**
+```json
+{ 
+  "status":"OK",
+  "dbconnection": [connection string],
+  "n_charge_points": [number of charge points],
+  "n_charge_points_online": [number of charge points online],
+  "n_charge_points_offline": [number of charge points online]
+}
+```
+
+**Error Responses:**
+- `400 Bad Request`: Failure to connect to database or other error occured (returns error log object)
+
+**Description:** 
+Used to check the end-to-end connection of users to the database, also provides statistics for the number of charging points available in database.
+
+---
+
+### POST /resetpoints
+
+Resets database with initial charging points.
+
+**Endpoint:** `POST /api/admin/resetpoints`
+
+**Request Parameters:** no parameters required
+
+**Response (200 OK):**
+```json
+{
+  "status": "OK",
+  "message": "Data reset to initial state successfully."
+}
+```
+
+**Error Responses:**
+- `500 Internal Server Error`: Server error (returns error log object)
+
+**Description:**
+Deletes all data regarding charging points from database (Station, Charger, Reservation, ChargerStatusHistory, Session). Only users and PricingHistory data remain. Then, it inserts data (stations and chargers) from a json file placed in [`reset_data.json`](../back-end/database/sample_data/reset_data.json), so database is initialized with the contents of `reset_data.json`.
+
+---
+
+### POST /addpoints
+
+Add charging points to database from the uploaded file.
+
+**Endpoint:** `POST /api/admin/addpoints`
+
+**Request Parameters:** a file containing charging points is required. Only text/csv data type is supported. File must be uploaded as `content type: multipart/form-data`. File must have a specific format to be accepted successfully. Example of the file is in [`back-end/database/sample_data/add2points.csv`](database/sample_data/add2points.csv).
+
+**File Format Example:** 
+
+| Column                    | Value                       | Meaning                                        |
+| ------------------------- | --------------------------- | ---------------------------------------------- |
+| `access`                  | `1`                         | Access level |
+| `address`                 | `Souri 1-3, Athens, Greece` | Physical location                              |
+| `available_station_count` | `1`                         | Chargers currently available                   |
+| `coming_soon`             | `False`                     | Whether station is live or not yet                                |
+| `connector_types`         | `CCS1, CHAdeMO`             | Supported connectors   |
+| `icon`                    | URL                         | Marker icon                                    |
+| `icon_type`               | `Y`                         | Icon category                                  |
+| `id`                      | `2000000`                   | Station ID                                     |
+| `in_use_station_count`    | `1`                         | Chargers currently in use                      |
+| `is_fast_charger`         | `True`                      | DC fast charger                                |
+| `latitude`                | `37.9733926`                | GPS latitude                                   |
+| `longitude`               | `23.7334342`                | GPS longitude                                  |
+| `map_card_logo_url`       | URL                         | Network logo                                   |
+| `name`                    | `Alpha Charge Point`        | Station name                                   |
+| `station_count`           | `2`                         | Total chargers                                 |
+| `under_repair`            | `False`                     | Not under maintenance                          |
+| `url`                     | API URL                     | Link to station page                           |
+| `thumbnail_url`           | *(empty)*                   | Optional image                                 |
+| `outlet_connector`        | `13`                        | Connector type ID                              |
+| `outlet_id`               | `4000000`                   | Outlet ID                                      |
+| `outlet_kilowatts`        | `150.0`                     | Max power                                      |
+| `outlet_power`            | `0`                         | Current draw / state                           |
+| `outlet_status`           | `AVAILABLE`                 | Availability status                            |
+
+
+**Response (200 OK):**
+```json
+{
+            "status": "OK",
+            "message": "Successfully imported <X> stations."
+}
+```
+
+**Error Responses:**
+All errors return error log objects
+- `400 Internal Server Error`: No file uploaded or file is not of the correct type
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Used to add charging points and their respective stations to the database from the aforementioned uploaded file.
+
+---
+
+## Admin Stats Routes
+
+**File:** [`back-end/server/routes/adminStatsRoutes.js`](../back-end/server/routes/adminStatsRoutes.js)
+
+Base URL: `/api/adminStats`
+
+### GET /charts
+
+Retrieve all available statistical data for charts for admin statistics.
+
+**Endpoint:** `GET /api/adminStats/charts`
+
+**Query Parameters:** 
+- range: Optional, brings the statistics for the last <range> months. Default is 12 if not specified.
+- chargerID: Optional, used if data for a specific charger id requested, else it returns global statistics only.
+
+**Response (200 OK):**
+```json
+{
+  "status": "OK",
+  "data":
+  {
+    monthlyFinance,
+    stationRevenue,
+    energyHeatmap,   
+    powerEfficiency,
+    chargerList,
+    healthUptime,
+    failureHistory,
+    userGrowth,  
+    returningUsers
+  }
+}
+```
+
+**Error Responses:**
+All errors return error log objects
+- `401 Unauthorized`: Invalid token, user does not exist
+- `403 Forbidden`: User not an admin
+- `500 Internal Server Error`: Server error (returns error log)
+
+**Description:**
+Returns all available statistics for the administrator. Administrator must be logged in with a valid administrator account. To be used only via the front-end, as the charts are visualized via the front-end.
 
 ---
 

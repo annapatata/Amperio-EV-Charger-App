@@ -101,13 +101,27 @@ describe('CLI Commands', () => {
 
   // --- se2519 point --id <id> ---
   describe('point command', () => {
-    it('should return details for a specific point', async () => {
-        const pointId = 4704813; // Charger ID from first record in reset_data.json
-        const { stdout, stderr } = await runCli(`point --id ${pointId}`);
-        expect(stderr).toBe('');
-        // Check for properties as substrings since console.log(object) is not valid JSON
-        expect(stdout).toContain(`pointid: ${pointId}`);
-    });
+
+it('should return details for a specific point', async () => {
+  
+  const pointId = 4704813; // Charger ID from first record in reset_data.json
+  const { stdout, stderr } = await runCli(`point --id ${pointId}`);
+
+  expect(stderr).toBe('');
+
+  const result = JSON.parse(stdout);
+expect(result).toHaveProperty('pointid', pointId);
+  expect(typeof result.lon).toBe('string');
+  expect(typeof result.lat).toBe('string');
+  expect(typeof result.cap).toBe('number');
+  expect(typeof result.reservationendtime).toBe('string');
+  expect(typeof result.status).toBe('string');
+
+  // kwhprice can be number or null
+  expect(
+    result.kwhprice === null || typeof result.kwhprice === 'number'
+  ).toBe(true);
+});
 
 it('should return error log for a non-existent point', async () => {
         const { stdout, stderr } = await runCli('point --id 9999999');
@@ -144,7 +158,21 @@ it('should return error log for a non-existent point', async () => {
       // Verify the point was actually added
       const { stdout: pointOut, stderr: pointErr } = await runCli('point --id 99901');
         expect(pointErr).toBe('');
-        expect(pointOut).toContain('pointid: 99901');
+	    // Parse the JSON output
+  const result = JSON.parse(pointOut);
+
+  // Check the pointid
+  expect(result.pointid).toBe(99901);
+
+  // Optional: check the shape of other fields
+  expect(typeof result.lon).toBe('string');
+  expect(typeof result.lat).toBe('string');
+  expect(typeof result.status).toBe('string');
+  expect(typeof result.cap).toBe('number');
+  expect(typeof result.reservationendtime).toBe('string');
+
+  // kwhprice can be number or null
+  expect(result.kwhprice === null || typeof result.kwhprice === 'number').toBe(true);
     });
   });
 
@@ -159,10 +187,18 @@ it('should return error log for a non-existent point', async () => {
 
       const { stdout, stderr } = await runCli(`reserve --id ${pointId} --minutes 5`);
       expect(stderr).toBe('');
-      
-      expect(stdout).toContain(`pointid: '${pointId}'`); 
-      expect(stdout).toContain("status: 'reserved'");
-      expect(stdout).toContain('reservationendtime');
+     	const output = JSON.parse(stdout);
+
+	expect(output.pointid).toBe(String(pointId));
+	expect(output.status).toBe('reserved');
+	expect(output).toHaveProperty('reservationendtime');
+
+	const reservationEndTime = new Date(output.reservationendtime.replace(' ', 'T'));
+	const now = new Date();
+	const diffMinutes = (reservationEndTime - now) / (1000 * 60);
+	expect(diffMinutes).toBeGreaterThanOrEqual(4.9);
+	expect(diffMinutes).toBeLessThanOrEqual(5.1);
+
     });
 
     it('should fail to reserve a point that is not available', async () => {
