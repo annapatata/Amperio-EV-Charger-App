@@ -53,7 +53,7 @@ program
 			catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -76,7 +76,7 @@ program
 		catch (err) {
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -113,7 +113,7 @@ program
 	catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -153,7 +153,7 @@ program
 			catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -179,7 +179,7 @@ program
 			catch (err) {
  				if (err.response) {
     				// API responded with an error status
-    					console.error(err.response.data);
+    					console.error(JSON.stringify(err.response.data, null, 2));
   				} else if (err.request) {
     				// Request was made but no response
     					console.error("No response received:", err.request);
@@ -205,7 +205,7 @@ program
 		catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -248,7 +248,7 @@ program
 		catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -291,7 +291,7 @@ program
 		catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -330,7 +330,7 @@ program
 			catch (err) { 
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);
@@ -378,7 +378,7 @@ program
 			catch (err) {
                                 if (err.response) {
                                 // API responded with an error status
-                                        console.error(err.response.data);
+                                        console.error(JSON.stringify(err.response.data, null, 2));
                                 } else if (err.request) {
                                 // Request was made but no response
                                         console.error("No response received:", err.request);

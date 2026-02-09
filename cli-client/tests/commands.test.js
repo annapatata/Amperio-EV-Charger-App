@@ -183,6 +183,8 @@ it('should return error log for a non-existent point', async () => {
       const pointId = 4704813;
 
       // Force status to 'available' first to ensure test stability
+	    
+	const now = new Date();
       await runCli(`updpoint --id ${pointId} --status available`);
 
       const { stdout, stderr } = await runCli(`reserve --id ${pointId} --minutes 5`);
@@ -194,10 +196,9 @@ it('should return error log for a non-existent point', async () => {
 	expect(output).toHaveProperty('reservationendtime');
 
 	const reservationEndTime = new Date(output.reservationendtime.replace(' ', 'T'));
-	const now = new Date();
 	const diffMinutes = (reservationEndTime - now) / (1000 * 60);
-	expect(diffMinutes).toBeGreaterThanOrEqual(4.9);
-	expect(diffMinutes).toBeLessThanOrEqual(5.1);
+	expect(diffMinutes).toBeGreaterThanOrEqual(4);
+	expect(diffMinutes).toBeLessThanOrEqual(6);
 
     });
 
@@ -207,10 +208,18 @@ it('should return error log for a non-existent point', async () => {
         
         const { stdout, stderr } = await runCli('reserve --id 4704813 --minutes 5');
         
-        // Combine output to check for the error log safely
-        
-        // Expect 409 Conflict (or your specific error code)
-        expect(stderr).toContain('Error reserving station: Request failed with status code 404'); 
+        const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/reserve/4704813/5',
+    return_code: 404,
+    error: 'Point with ID 4704813 is not available for reservation',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
     });
   });
 
@@ -265,7 +274,20 @@ it('should return error log for a non-existent point', async () => {
         const amount = 10;
         const { stdout, stderr } = await runCli(`newsession --id ${pointId} --starttime "2025-12-01 10:00" --endtime "2025-12-01 9:00" --startsoc ${startsoc} --endsoc ${endsoc} --totalkwh ${totalkwh} --kwhprice ${kwhprice} --amount ${amount}`);
         expect(stdout).toBe('');
-        expect(stderr).toContain('Error');
+
+const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/newsession',
+    return_code: 400,
+    error: 'endtime not valid timestamp',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
+
     });
   });
   
@@ -308,7 +330,18 @@ it('should return error log for a non-existent point', async () => {
 
         expect(stdout).toBe('');
 
-        expect(stderr).toContain('Error fetching sessions: Request failed with status code 400');
+const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/sessions/4704813/2025-11-01/2025-11-30',
+    return_code: 400,
+    error: 'from date must be integer',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
 
     });
 

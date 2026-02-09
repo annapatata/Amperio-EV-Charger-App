@@ -42,7 +42,6 @@ const validateNewSession = (req, res, next) =>
                                 return next(new Error(field.msg));
                         }
                  }
-
                 next(); // all validations passed
 	}
 	catch (error)
