@@ -565,182 +565,169 @@ Reserve a charging point for the specified amount of minutes.
 ```
 
 **Error Responses:**
-- `404 Internal Server Error`: Point does not exist or is not available for reservation
+- `404 Internal Server Error`: Point does not exist or is not available for reservation (it also sends a json response similar to the 200 - OK in format but timestamp is "1970-01-01 00:00")
 - `500 Internal Server Error`: Server error
 
 **Description:**
-Reserve the specified charger. The reservation expires after the amount of minutes passes from the time of the reservation. If amount of minutes is not specified, it is reserved for the default amount of 30 minutes. If the amount of minutes is specified but exceeds the limit of reservation (60 minutes), the charger is reserved for 60 minutes. If the amount of minutes is not over the limit, the charger is reserved for the specified amount. 
+Reserve the specified charger. The reservation expires after the amount of minutes passes from the time of the reservation. If amount of minutes is not specified, it is reserved for the default amount of 30 minutes. If the amount of minutes is specified but exceeds the limit of reservation (60 minutes), the charger is reserved for 60 minutes. If the amount of minutes is not over the limit, the charger is reserved for the specified amount.
 
 ---
 
-### GET /
+### POST /updpoint:id
 
-Retrieve all stations.
+Update status and or price of a charger.
 
-**Endpoint:** `GET /api/stations`
+**Endpoint:** `GET /api/updpoint/:id`
 
-**Request Parameters:** None
+**Path Parameters:** `id` (required) : id of charger to be updated
 
+**Body Parameters:**
+```json
+{
+  "status": <new valid charger status>,
+  "kwhprice": <float>
+}
+```
 **Response (200 OK):**
 ```json
 [
-  {
-    "station_id": 1,
-    "address": "123 Main St, City",
-    "latitude": 40.7128,
-    "longitude": -74.0060,
-    "facilities": "WiFi,Cafe,Restroom",
-    "score": 4.5,
-    "station_status": "available",
-    "available_chargers": 3,
-    "total_chargers": 5
-  },
-  ...
+  "pointid": 2,
+  "status": "available",
+  "kwhprice": 0.40
 ]
 ```
 
 **Error Responses:**
+- `400 Bad Request`: No fields in body or invalid charger status
+- `404 Not Found`: Charger not found
 - `500 Internal Server Error`: Server error
 
 **Description:**
-Returns all charging stations in the system with their current status, available chargers, and amenities. No authentication required.
+Update the status or the price of a charger. The id of the selected charger is given as a path parameter. In the body of the call, there must be at least one of the fields `status`, `kwhprice` or both. If successful, the call returns the new updated values of the charger.
 
 ---
 
-### GET /:id
+### POST /newsession
 
-Retrieve detailed information about a specific station.
+Log a new session.
 
-**Endpoint:** `GET /api/stations/{id}`
+**Endpoint:** `GET /api/newsession`
 
-**Request Parameters:**
-- `id` (path parameter): Station ID
-
-**Response (200 OK):**
+**Body Parameters:**
 ```json
 {
-  "station_id": 1,
-  "address": "123 Main St, City",
-  "latitude": 40.7128,
-  "longitude": -74.0060,
-  "facilities": "WiFi,Cafe,Restroom",
-  "score": 4.5,
-  "chargers": [
-    {
-      "charger_id": 101,
-      "connector_type": "Type 2",
-      "power": 22,
-      "charger_status": "available"
-    },
-    ...
-  ]
+  "pointid": <number or string with id of charger>,
+  "starttime": <timestamp of when charging started>,
+  "endtime": <timestamp of when charging ended>,
+  "startsoc": <starting percentage of battery>,
+  "endsoc": <ending percentage of battery>,
+  "totalkwh": <total energy spent>,
+  "kwhprice": <float for price of kwh>,
+  "amount": <money paid by customer>
 }
 ```
 
+**Response (200 OK):**
+```json
+[]
+```
+
 **Error Responses:**
-- `404 Not Found`: Station not found
+- `400 Bad Request`: Body parameter missing or invalid type
 - `500 Internal Server Error`: Server error
 
 **Description:**
-Returns detailed information about a specific station, including all chargers with their specifications and current status. No authentication required. Used for StationDetails.jsx
+Body of the call is a log of a session. All fields are required. If the session is successfully logged, returns empty body.
 
 ---
 
-### GET /search
+### GET /sessions/:id/:from/:to
 
-Search and filter stations by various criteria.
+Retrieve all charging sessions from a particular charger for the specified period of time.
 
-**Endpoint:** `GET /api/stations/search`
+**Endpoint:** `GET /api/sessions/:id/:from/:to`
 
-**Request Parameters (Query String):**
-- `q` (optional): Search query for address 
-- `power` (optional): Comma-separated power levels (e.g., "11,22,50")
-- `connector` (optional): Comma-separated connector types (e.g., "Type 2,CCS1")
-- `available` (optional): Boolean string ("true"/"false") - show only stations with available chargers
-- `facilities` (optional): Comma-separated facility names to filter by
-- `score` (optional): Comma-separated minimum ratings (returns stations matching any specified rating)
+**Path Parameters:**
+- `id` (required) id of charger
+- `from` (required): YYYYMMDD starting time of search period 
+- `to` (required): YYYYMMDD ending time of the search period
 
-**Example Requests:**
-```
-GET /api/stations/search?q=Ilioupoli
-GET /api/stations/search?power=22,50&connector=Type 2
-GET /api/stations/search?available=true&facilities=WiFi,Cafe
-GET /api/stations/search?q=main&score=4,5&power=50
-```
+**Query Parameters:**
+- `format` (optional): format of response: json or csv
 
 **Response (200 OK):**
 ```json
 [
   {
-    "station_id": 1,
-    "address": "Ilioupoli, SunCity",
-    "latitude": 40.7128,
-    "longitude": -74.0060,
-    "facilities": "WiFi,Cafe,Restroom",
-    "score": 4.5,
-    "station_status": "available",
-    "available_chargers": 3,
-    "total_chargers": 5
+    "starttime": "2025-11-07 09:10",
+    "endtime": "2025-11-07 10:20",
+    "startsoc": 20,
+    "endsoc": 70,
+    "totalkwh": 18.4,
+    "kwhprice": 0.29,
+    "amount": 5.34
   },
   ...
 ]
 ```
+If no sessions happened for the charger in that time period, it returns 204 with empty content.
 
 **Error Responses:**
+- `400 Bad Request`: Wrong path parameters or path parameters missing
 - `500 Internal Server Error`: Server error
 
 **Description:**
-Advanced search endpoint with multiple filter options. Combines charger-level filters (power, connector) with station-level filters (facilities, score). Use INNER JOIN logic when charger filters are applied to exclude incompatible stations. Returns only stations with available chargers when `available=true`. No authentication required.
-
+Returns a list of all sessions that took place in charger (id) in the time period (from,to) starting after \<from> 00:00:00 and ending before \<to> 23:59:59.
 
 ---
 
-### GET /search
+### GET /pointstatus/:pointid/:from/:to
 
-Search and filter stations by various criteria.
+Retrieve all status changes from a particular charger for the specified period of time.
 
-**Endpoint:** `GET /api/stations/search`
+**Endpoint:** `GET /api/pointstatus/:pointid/:from/:to`
 
-**Request Parameters (Query String):**
-- `q` (optional): Search query for address 
-- `power` (optional): Comma-separated power levels (e.g., "11,22,50")
-- `connector` (optional): Comma-separated connector types (e.g., "Type 2,CCS1")
-- `available` (optional): Boolean string ("true"/"false") - show only stations with available chargers
-- `facilities` (optional): Comma-separated facility names to filter by
-- `score` (optional): Comma-separated minimum ratings (returns stations matching any specified rating)
+**Path Parameters:**
+- `pointid` (required) id of charger
+- `from` (required): YYYYMMDD starting time of search period 
+- `to` (required): YYYYMMDD ending time of the search period
 
-**Example Requests:**
-```
-GET /api/stations/search?q=Ilioupoli
-GET /api/stations/search?power=22,50&connector=Type 2
-GET /api/stations/search?available=true&facilities=WiFi,Cafe
-GET /api/stations/search?q=main&score=4,5&power=50
-```
+**Query Parameters:**
+- `format` (optional): format of response: json or csv
 
 **Response (200 OK):**
 ```json
 [
   {
-    "station_id": 1,
-    "address": "Ilioupoli, SunCity",
-    "latitude": 40.7128,
-    "longitude": -74.0060,
-    "facilities": "WiFi,Cafe,Restroom",
-    "score": 4.5,
-    "station_status": "available",
-    "available_chargers": 3,
-    "total_chargers": 5
+    "timeref": "2025-11-02 08:55",
+    "old_state": "available",
+    "new_state": "charging"
   },
-  ...
+  {
+    "timeref": "2025-11-02 10:25",
+    "old_state": "charging",
+    "new_state": "available"
+  },
+  {
+    "timeref": "2025-11-05 15:40",
+    "old_state": "available",
+    "new_state": "reserved"
+  },
+  {
+    "timeref": "2025-11-05 15:45",
+    "old_state": "reserved",
+    "new_state": "charging"
+  }
 ]
 ```
+If no sessions happened for the charger in that time period, it returns 204 with empty content.
 
 **Error Responses:**
+- `400 Bad Request`: Wrong path parameters or path parameters missing
 - `500 Internal Server Error`: Server error
 
 **Description:**
-Advanced search endpoint with multiple filter options. Combines charger-level filters (power, connector) with station-level filters (facilities, score). Use INNER JOIN logic when charger filters are applied to exclude incompatible stations. Returns only stations with available chargers when `available=true`. No authentication required.
-
+Returns a list of all status changes happened in the specified time period.
 
 ---
 
