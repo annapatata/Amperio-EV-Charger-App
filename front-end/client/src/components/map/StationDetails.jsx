@@ -1,4 +1,8 @@
 import "./StationDetails.css";
+import type2Image from "../../assets/images/type2.png";
+import ccs1Image from "../../assets/images/ccs1.png";
+import ccs2Image from "../../assets/images/ccs2.png";
+import chademoImage from "../../assets/images/chademo.png";
 
 
 const ConnectorIcon = ({ type }) => {
