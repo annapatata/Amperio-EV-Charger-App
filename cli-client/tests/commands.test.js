@@ -101,13 +101,27 @@ describe('CLI Commands', () => {
 
   // --- se2519 point --id <id> ---
   describe('point command', () => {
-    it('should return details for a specific point', async () => {
-        const pointId = 4704813; // Charger ID from first record in reset_data.json
-        const { stdout, stderr } = await runCli(`point --id ${pointId}`);
-        expect(stderr).toBe('');
-        // Check for properties as substrings since console.log(object) is not valid JSON
-        expect(stdout).toContain(`pointid: ${pointId}`);
-    });
+
+it('should return details for a specific point', async () => {
+  
+  const pointId = 4704813; // Charger ID from first record in reset_data.json
+  const { stdout, stderr } = await runCli(`point --id ${pointId}`);
+
+  expect(stderr).toBe('');
+
+  const result = JSON.parse(stdout);
+expect(result).toHaveProperty('pointid', pointId);
+  expect(typeof result.lon).toBe('string');
+  expect(typeof result.lat).toBe('string');
+  expect(typeof result.cap).toBe('number');
+  expect(typeof result.reservationendtime).toBe('string');
+  expect(typeof result.status).toBe('string');
+
+  // kwhprice can be number or null
+  expect(
+    result.kwhprice === null || typeof result.kwhprice === 'number'
+  ).toBe(true);
+});
 
 it('should return error log for a non-existent point', async () => {
         const { stdout, stderr } = await runCli('point --id 9999999');
@@ -136,7 +150,7 @@ it('should return error log for a non-existent point', async () => {
       const csvContent = 'id,name,address,latitude,longitude,outlet_id\n999,Test Add Station,456 Test Ave,38,-24,99901';
       await fs.writeFile(testCsvPath, csvContent);
       
-      const { stdout, stderr } = await runCli(`addpoints --source ${testCsvPath}`);
+      const { stdout, stderr } = await runCli(`addpoints --source "${testCsvPath}"`);
       expect(stderr).toBe('');
       expect(stdout).toContain('Upload successful');
       expect(stdout).toContain('Successfully imported 1 stations.');
@@ -144,7 +158,21 @@ it('should return error log for a non-existent point', async () => {
       // Verify the point was actually added
       const { stdout: pointOut, stderr: pointErr } = await runCli('point --id 99901');
         expect(pointErr).toBe('');
-        expect(pointOut).toContain('pointid: 99901');
+	    // Parse the JSON output
+  const result = JSON.parse(pointOut);
+
+  // Check the pointid
+  expect(result.pointid).toBe(99901);
+
+  // Optional: check the shape of other fields
+  expect(typeof result.lon).toBe('string');
+  expect(typeof result.lat).toBe('string');
+  expect(typeof result.status).toBe('string');
+  expect(typeof result.cap).toBe('number');
+  expect(typeof result.reservationendtime).toBe('string');
+
+  // kwhprice can be number or null
+  expect(result.kwhprice === null || typeof result.kwhprice === 'number').toBe(true);
     });
   });
 
@@ -155,14 +183,23 @@ it('should return error log for a non-existent point', async () => {
       const pointId = 4704813;
 
       // Force status to 'available' first to ensure test stability
+	    
+	const now = new Date();
       await runCli(`updpoint --id ${pointId} --status available`);
 
       const { stdout, stderr } = await runCli(`reserve --id ${pointId} --minutes 5`);
       expect(stderr).toBe('');
-      
-      expect(stdout).toContain(`pointid: '${pointId}'`); 
-      expect(stdout).toContain("status: 'reserved'");
-      expect(stdout).toContain('reservationendtime');
+     	const output = JSON.parse(stdout);
+
+	expect(output.pointid).toBe(String(pointId));
+	expect(output.status).toBe('reserved');
+	expect(output).toHaveProperty('reservationendtime');
+
+	const reservationEndTime = new Date(output.reservationendtime.replace(' ', 'T'));
+	const diffMinutes = (reservationEndTime - now) / (1000 * 60);
+	expect(diffMinutes).toBeGreaterThanOrEqual(4);
+	expect(diffMinutes).toBeLessThanOrEqual(6);
+
     });
 
     it('should fail to reserve a point that is not available', async () => {
@@ -171,10 +208,18 @@ it('should return error log for a non-existent point', async () => {
         
         const { stdout, stderr } = await runCli('reserve --id 4704813 --minutes 5');
         
-        // Combine output to check for the error log safely
-        
-        // Expect 409 Conflict (or your specific error code)
-        expect(stderr).toContain('Error reserving station: Request failed with status code 404'); 
+        const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/reserve/4704813/5',
+    return_code: 404,
+    error: 'Point with ID 4704813 is not available for reservation',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
     });
   });
 
@@ -229,7 +274,20 @@ it('should return error log for a non-existent point', async () => {
         const amount = 10;
         const { stdout, stderr } = await runCli(`newsession --id ${pointId} --starttime "2025-12-01 10:00" --endtime "2025-12-01 9:00" --startsoc ${startsoc} --endsoc ${endsoc} --totalkwh ${totalkwh} --kwhprice ${kwhprice} --amount ${amount}`);
         expect(stdout).toBe('');
-        expect(stderr).toContain('Error');
+
+const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/newsession',
+    return_code: 400,
+    error: 'endtime not valid timestamp',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
+
     });
   });
   
@@ -272,7 +330,18 @@ it('should return error log for a non-existent point', async () => {
 
         expect(stdout).toBe('');
 
-        expect(stderr).toContain('Error fetching sessions: Request failed with status code 400');
+const output = JSON.parse(stderr);
+
+  expect(output).toMatchObject({
+    call: '/api/sessions/4704813/2025-11-01/2025-11-30',
+    return_code: 400,
+    error: 'from date must be integer',
+    debuginfo: null
+  });
+
+  // Optional: explicitly assert dynamic fields exist
+  expect(output.timeref).toBeDefined();
+  expect(output.originator).toBeDefined();
 
     });
 

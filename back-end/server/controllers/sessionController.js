@@ -26,7 +26,7 @@ const newSession = async (req, res, next) =>
 		}
 		
 		//extract valid start timestamp
-		const validStartTime = extractTimestamp(starttime) + ":00";
+		const validStartTime = extractTimestamp(starttime);
 
 		if ( validStartTime == null || !validateTimestamp(validStartTime) )
 		{
@@ -35,7 +35,7 @@ const newSession = async (req, res, next) =>
 		}
 
 		//extract valid end timestamp
-                const validEndTime = extractTimestamp(endtime) + ":00";
+                const validEndTime = extractTimestamp(endtime);
 
                 if ( validEndTime == null || !validateTimestamp(validEndTime) )
                 {
@@ -97,7 +97,7 @@ const newSession = async (req, res, next) =>
 			return next (new Error ("session already exists, no duplicates allowed"));
 		}
 
-		const resp = await Session.createSession(numChargerID, validStartTime, validEndTime, numStartSoc, numEndSoc, totalkwh_str, kwhprice_str);
+		const resp = await Session.createSession(numChargerID, (validStartTime+":00"), (validEndTime+":00"), numStartSoc, numEndSoc, totalkwh_str, kwhprice_str);
 
 		//success, return empty body
 		return res.status(200).json();
