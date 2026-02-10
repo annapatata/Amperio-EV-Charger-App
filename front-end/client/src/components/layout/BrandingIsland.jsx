@@ -1,3 +1,5 @@
+import amperiologo from "../../assets/images/amperiologo.png";
+
 // components/layout/BrandingIsland.jsx
 export default function BrandingIsland() {
   return (
