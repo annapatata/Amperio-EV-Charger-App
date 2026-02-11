@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const request = require('supertest');
 const app = require('../index');
 const Station = require('../models/stationModel');
@@ -21,7 +22,15 @@ describe('Requested APIs', () => {
         uniqueIdBase = new Date().getTime();
         const uniqueId = uniqueIdBase % 1000000;
 
-        // Create a test user for session-related tests
+        const hashedPassword = await bcrypt.hash('TestPass123', 10);
+        // Ensure user_id = 1 exists for tests that implicitly use it
+        await db.query('DELETE FROM Users WHERE user_id = 1');
+        await db.query(
+            'INSERT INTO Users (user_id, username, email, safe_password, role) VALUES (?, ?, ?, ?, ?)',
+            [1, 'default_test_user', 'default@example.com', hashedPassword, 'user']
+        );
+
+        // Create a test user for session-related tests (used by other tests)
         const userRes = await request(app).post('/api/auth/signup').send({
             username: `req_user_${uniqueId}`,
             email: `req_user_${uniqueId}@example.com`,
@@ -82,6 +91,9 @@ describe('Requested APIs', () => {
         // Clean up all created test data
         try {
             if (testUserId) await Session.deleteByUserId(testUserId);
+            // Clean up the user with user_id = 1 created for the newsession test
+            await db.query('DELETE FROM Users WHERE user_id = 1');
+            
             
             // Delete history and reservations before deleting charger to avoid foreign key errors
             if (testChargerId1) {

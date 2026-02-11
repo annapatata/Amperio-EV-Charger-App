@@ -1,0 +1,516 @@
+
+> server@1.0.0 test
+> jest -i requested.test.js
+
+  console.log
+    [dotenv@17.2.3] injecting env (8) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    DB_USER = root
+
+      at Object.log (config/db.js:16:9)
+
+  console.log
+    DB_PASSWORD = SET
+
+      at Object.log (config/db.js:17:9)
+
+  console.log
+    DB_NAME = amperio_test
+
+      at Object.log (config/db.js:18:9)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.error
+    Error Logged: {
+      call: '/api/points?status=invalid_status',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 400,
+      error: 'Invalid status parameter. Supported values: available, charging, reserved, offline, malfunction',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/chargerController.js:21:18)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at next (middleware/responseFormatter.js:28:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at Route.dispatch (node_modules/router/lib/route.js:117:3)
+      at handle (node_modules/router/index.js:435:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at node_modules/router/index.js:295:15
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at router (node_modules/router/index.js:60:12)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:54:5)
+      at urlencodedParser (node_modules/body-parser/lib/types/urlencoded.js:58:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:54:5)
+      at jsonParser (node_modules/body-parser/lib/types/json.js:90:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at cors (node_modules/cors/lib/index.js:188:7)
+      at node_modules/cors/lib/index.js:224:17
+      at originCallback (node_modules/cors/lib/index.js:214:15)
+      at node_modules/cors/lib/index.js:219:13
+      at optionsCallback (node_modules/cors/lib/index.js:199:9)
+      at corsMiddleware (node_modules/cors/lib/index.js:204:7)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at app.handle (node_modules/express/lib/application.js:177:15)
+      at Server.app (node_modules/express/lib/express.js:38:9)
+
+  console.error
+    Error Logged: {
+      call: '/api/point/999999999',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 404,
+      error: 'Point with ID 999999999 not found',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/chargerController.js:60:20)
+
+  console.log
+    {
+      pointid: '828718',
+      status: 'reserved',
+      reservationendtime: '2026-02-11 03:00'
+    }
+
+      at log (controllers/chargerController.js:137:21)
+
+  console.log
+    { pointid: '828718', status: 'available', kwhprice: 0.3 }
+
+      at log (controllers/chargerController.js:191:17)
+
+  console.log
+    {
+      pointid: '828718',
+      status: 'reserved',
+      reservationendtime: '2026-02-11 02:45'
+    }
+
+      at log (controllers/chargerController.js:137:21)
+
+  console.log
+    {
+      pointid: '828719',
+      status: 'charging',
+      reservationendtime: '1970-01-01 00:00'
+    }
+
+      at log (controllers/chargerController.js:143:21)
+
+  console.error
+    Error Logged: {
+      call: '/api/reserve/828719',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 404,
+      error: 'Point with ID 828719 is not available for reservation',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/chargerController.js:144:20)
+
+  console.log
+    Updating kwhprice to: 0.99
+
+      at log (controllers/chargerController.js:185:21)
+
+  console.log
+    { pointid: '828719', status: 'available', kwhprice: 0.99 }
+
+      at log (controllers/chargerController.js:191:17)
+
+  console.log
+    No parameters provided for update.
+
+      at log (controllers/chargerController.js:168:21)
+
+  console.error
+    Error Logged: {
+      call: '/api/updpoint/828719',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 400,
+      error: 'Please provide either status or kwhprice to update.',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/chargerController.js:170:20)
+
+  console.error
+    Error Logged: {
+      call: '/api/newsession',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 500,
+      error: 'Cannot add or update a child row: a foreign key constraint fails (`amperio_test`.`session`, CONSTRAINT `session_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE)',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/sessionController.js:107:3)
+
+  console.error
+    Error Logged: {
+      call: '/api/newsession',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 400,
+      error: 'starttime missing or not string',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at next (node_modules/router/lib/route.js:155:13)
+      at next (middleware/validateNewSession.js:42:40)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at Route.dispatch (node_modules/router/lib/route.js:117:3)
+      at handle (node_modules/router/index.js:435:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at node_modules/router/index.js:295:15
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at router (node_modules/router/index.js:60:12)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:43:5)
+      at urlencodedParser (node_modules/body-parser/lib/types/urlencoded.js:58:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/body-parser/lib/read.js:172:5
+      at invokeCallback (node_modules/raw-body/index.js:238:16)
+      at done (node_modules/raw-body/index.js:227:7)
+      at IncomingMessage.onEnd (node_modules/raw-body/index.js:287:7)
+
+  console.error
+    Error Logged: {
+      call: '/api/sessions/828718/2025-11-01/2025-11-30',
+      timeref: '2026-02-11 02:30',
+      originator: '::ffff:127.0.0.1',
+      return_code: 400,
+      error: 'from date must be integer',
+      debuginfo: null
+    }
+
+    [0m [90m 29 |[39m
+     [90m 30 |[39m     [90m// 4. Log to your server console (so you can see it in terminal)[39m
+    [31m[1m>[22m[39m[90m 31 |[39m     console[33m.[39merror([32m'Error Logged:'[39m[33m,[39m errorLog)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 32 |[39m
+     [90m 33 |[39m     [90m// 5. Send the JSON response to the user[39m
+     [90m 34 |[39m     res[33m.[39mjson(errorLog)[33m;[39m[0m
+
+      at error (middleware/errorHandler.js:31:13)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (controllers/sessionController.js:126:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at next (middleware/responseFormatter.js:28:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at Route.dispatch (node_modules/router/lib/route.js:117:3)
+      at handle (node_modules/router/index.js:435:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at node_modules/router/index.js:295:15
+      at param (node_modules/router/index.js:600:14)
+      at param (node_modules/router/index.js:610:14)
+      at param (node_modules/router/index.js:610:14)
+      at param (node_modules/router/index.js:610:14)
+      at processParams (node_modules/router/index.js:664:3)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at router (node_modules/router/index.js:60:12)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:54:5)
+      at urlencodedParser (node_modules/body-parser/lib/types/urlencoded.js:58:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:54:5)
+      at jsonParser (node_modules/body-parser/lib/types/json.js:90:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at cors (node_modules/cors/lib/index.js:188:7)
+      at node_modules/cors/lib/index.js:224:17
+      at originCallback (node_modules/cors/lib/index.js:214:15)
+      at node_modules/cors/lib/index.js:219:13
+      at optionsCallback (node_modules/cors/lib/index.js:199:9)
+      at corsMiddleware (node_modules/cors/lib/index.js:204:7)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at app.handle (node_modules/express/lib/application.js:177:15)
+      at Server.app (node_modules/express/lib/express.js:38:9)
+
+  console.log
+    { pointid: '828718', status: 'malfunction', kwhprice: 0.3 }
+
+      at log (controllers/chargerController.js:191:17)
+
+  console.log
+    { pointid: '828718', status: 'available', kwhprice: 0.3 }
+
+      at log (controllers/chargerController.js:191:17)
+
+FAIL tests/requested.test.js
+  Requested APIs
+    GET /api/points
+      √ should return a list of all charging points (38 ms)
+      √ should filter points by status "available" (9 ms)
+      √ should return 400 for an invalid status parameter (26 ms)
+      √ should support CSV format (17 ms)
+    GET /api/point/:id
+      √ should return details for a specific point (9 ms)
+      √ should return 404 for a non-existent point ID (10 ms)
+    POST /api/reserve/:id
+      √ should reserve an available point for 30 minutes by default (25 ms)
+      √ should reserve an available point for a specific number of minutes (27 ms)
+      √ should fail to reserve a point that is not available (14 ms)
+    POST /api/updpoint/:id
+      √ should update the status and price of a point (26 ms)
+      √ should return 400 if body is invalid or empty (13 ms)
+    POST /api/newsession
+      × should create a new charging session (16 ms)
+      √ should return 400 for invalid session data (12 ms)
+    GET /api/sessions/:id/:from/:to
+      √ should retrieve sessions for a specific point and date range (7 ms)
+      √ should return 400 for invalid date format (13 ms)
+      √ should return 204 No Content when no sessions are found in the date range (5 ms)
+    GET /api/pointstatus/:pointid/:from/:to
+      √ should retrieve status changes for a point in a date range (27 ms)
+      √ should return 204 No Content when no status changes are found in the date range (10 ms)
+    When the database is empty
+      √ GET /points should return 204 No Content (45 ms)
+
+  ● Requested APIs › POST /api/newsession › should create a new charging session
+
+    expected 200 "OK", got 500 "Internal Server Error"
+
+    [0m [90m 266 |[39m                 [33m.[39mpost([32m'/api/newsession'[39m)
+     [90m 267 |[39m                 [33m.[39msend(sessionData)
+    [31m[1m>[22m[39m[90m 268 |[39m                 [33m.[39mexpect([35m200[39m)[33m;[39m
+     [90m     |[39m                  [31m[1m^[22m[39m
+     [90m 269 |[39m         })[33m;[39m
+     [90m 270 |[39m
+     [90m 271 |[39m         it([32m'should return 400 for invalid session data'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.expect (tests/requested.test.js:268:18)
+      ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:309:14)
+      at node_modules/supertest/lib/test.js:365:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:342:13)
+      at Test.assert (node_modules/supertest/lib/test.js:195:23)
+      at localAssert (node_modules/supertest/lib/test.js:138:14)
+      at Server.<anonymous> (node_modules/supertest/lib/test.js:152:11)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        1.887 s, estimated 2 s
+Ran all test suites matching requested.test.js.
+[dotenv@17.2.3] injecting env (8) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+DB_USER = root
+DB_PASSWORD = SET
+DB_NAME = amperio_test
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.

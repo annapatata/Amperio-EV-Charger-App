@@ -81,10 +81,5 @@ describe('Admin API', () => {
     });
   });
 
-  // Security vulnerability tests
-  describe('Security Vulnerabilities', () => {
-    test.todo('should protect the /resetpoints endpoint with admin authentication');
-    test.todo('should protect the /addpoints endpoint with admin authentication');
-  });
 
 });
