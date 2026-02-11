@@ -111,20 +111,20 @@ describe('Admin Stats API', () => {
       expect(res.body.data).toHaveProperty('returningUsers');
     });
 
-    it('should return 400 Bad Request for a regular user', async () => {
+    it('should return 403 Bad Request for a regular user', async () => {
       const res = await request(app)
         .get('/api/adminStats/charts')
         .set('Authorization', `Bearer ${userToken}`)
         .expect('Content-Type', /json/)
-        .expect(400);
+        .expect(403);
       
       expect(res.body.error).toBe('User is not an admin');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/adminStats/charts')
-        .expect(403);
+        .expect(401);
     });
   });
 });

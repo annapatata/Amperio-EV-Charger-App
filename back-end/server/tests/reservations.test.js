@@ -109,10 +109,10 @@ describe('Reservations API', () => {
       expect(reservation).toHaveProperty('reservation_end_time');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/reservations/upcoming')
-        .expect(403);
+        .expect(401);
     });
   });
 });

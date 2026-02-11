@@ -95,10 +95,10 @@ describe('User Stats API', () => {
       expect(Number(res.body.totalEnergy)).toBeGreaterThanOrEqual(40); // Based on created session
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/userStats/kpis')
-        .expect(403);
+        .expect(401);
     });
   });
 
@@ -121,10 +121,10 @@ describe('User Stats API', () => {
       expect(sessionData).toHaveProperty('station_name');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/userStats/charts')
-        .expect(403);
+        .expect(401);
     });
   });
 });

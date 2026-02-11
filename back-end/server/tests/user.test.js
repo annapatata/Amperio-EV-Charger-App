@@ -70,10 +70,10 @@ describe('User API', () => {
       expect(res.body).toHaveProperty('default_connector_type');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/users/profile')
-        .expect(403);
+        .expect(401);
     });
   });
 
@@ -94,10 +94,10 @@ describe('User API', () => {
       expect(res.body).toHaveProperty('default_connector_type');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .get('/api/users/userdata')
-        .expect(403);
+        .expect(401);
     });
   });
 
@@ -241,11 +241,11 @@ describe('User API', () => {
       expect(res.body.error).toBe('No changes provided');
     });
 
-    it('should return 403 Forbidden if no token is provided', async () => {
+    it('should return 401 Forbidden if no token is provided', async () => {
       await request(app)
         .put('/api/users/profile')
         .send({ username: 'unauthorized_user' })
-        .expect(403);
+        .expect(401);
     });
   });
 });
